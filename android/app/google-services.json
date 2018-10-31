@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "970460522785",
+    "firebase_url": "https://web-collab-server.firebaseio.com",
+    "project_id": "web-collab-server",
+    "storage_bucket": "web-collab-server.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:970460522785:android:4f7d46315380189e",
+        "android_client_info": {
+          "package_name": "socialcloud.mobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "970460522785-3ij8tjqiu6coka2c8pskhu20qm9scvqn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "socialcloud.mobile",
+            "certificate_hash": "7b86846ea792b41fd9f2c9ac1772c2943898786b"
+          }
+        },
+        {
+          "client_id": "970460522785-5fmjnv18po2svn1vahtadboggm1hq5r6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCIp1aNdEGl3h9zON6Ne6MlakO-xGsI3B4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "970460522785-5fmjnv18po2svn1vahtadboggm1hq5r6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
