@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile/services/post.service.dart';
 
 import 'package:mobile/services/profile.service.dart';
+import 'package:mobile/util/snackbar.util.dart';
 
 
 class ComposerComponent extends StatefulWidget {
@@ -39,6 +40,7 @@ class _ComposerComponentState extends State<ComposerComponent> {
                                     ),
                                     keyboardType: TextInputType.multiline,
                                     maxLines: 8,
+                                    onChanged: (String value) => this._post = value,
                                 ),
                                 decoration: new BoxDecoration(
                                     border: new Border.all(color: Theme.of(context).accentColor),
@@ -78,37 +80,11 @@ class _ComposerComponentState extends State<ComposerComponent> {
     }
 
     void _handleSuccess(BuildContext context) {
-        this._showSuccessSnackBar(context, "post successfully created");
+        showSuccessSnackBar(context, "post successfully created");
         new Timer(const Duration(seconds: 1, milliseconds: 500), () => Navigator.of(context).pop());
     }
 
     void _handleFailure(BuildContext context) {
-        this._showFailureSnackBar(context, "failed to create post");
-    }
-
-    void _showSuccessSnackBar(BuildContext context, String message) {
-        Scaffold.of(context).showSnackBar(new SnackBar(
-            content: new Row(
-                children: <Widget>[
-                    new Text("Success", style: new TextStyle(color: Colors.green)),
-                    new Text(": "),
-                    new Text(message),
-                ],
-                mainAxisAlignment: MainAxisAlignment.center,
-            )
-        ));
-    }
-
-    void _showFailureSnackBar(BuildContext context, String message) {
-        Scaffold.of(context).showSnackBar(new SnackBar(
-            content: new Row(
-                children: <Widget>[
-                    new Text("Failure", style: new TextStyle(color: Colors.red)),
-                    new Text(": "),
-                    new Text(message),
-                ],
-                mainAxisAlignment: MainAxisAlignment.center,
-            )
-        ));
+        showFailureSnackBar(context, "failed to create post");
     }
 }

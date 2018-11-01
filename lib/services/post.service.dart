@@ -20,12 +20,11 @@ class PostService {
         Map<String, dynamic> body = {
             "username": username,
             "post": post,
-            "datetime": datetime.toIso8601String()
+            "datetime": datetime.toUtc().toIso8601String()
         };
-        print(body);
-//        Map<String, dynamic> response = await _httpService.Post("post/create", body);
-//
-//        bool success = response["success"];
-        return true;
+        Map<String, dynamic> response = await _httpService.Post("post/create", body);
+
+        bool success = response["success"];
+        return success;
     }
 }

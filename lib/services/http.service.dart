@@ -26,12 +26,19 @@ class HttpService {
             body: json.encode(body),
             encoding: Encoding.getByName("utf-8")
         );
-        return json.decode(response.body);
+        try {
+            return json.decode(response.body);
+        } catch (e) {
+            return {
+                "success": false,
+                "error": e.toString()
+            };
+        }
     }
 
     String get _baseUrl {
         String scheme = "http";
-        String ipAddress = "10.0.0.165";
+        String ipAddress = "10.227.148.102";
         String port = "8080";
         return "$scheme://$ipAddress:$port";
     }

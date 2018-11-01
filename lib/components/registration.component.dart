@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import 'package:mobile/services/profile.service.dart';
+import 'package:mobile/util/snackbar.util.dart';
 
 
 class RegistrationComponent extends StatefulWidget {
@@ -52,17 +55,19 @@ class _RegistrationComponentState extends State<RegistrationComponent> {
                             )
                         ),
                         _buildColumn(
-                            new RaisedButton(
-                                child: new Text(
-                                    "Submit",
-                                    style: new TextStyle(
-                                        color: Colors.white
-                                    )
-                                ),
-                                color: Theme.of(context).accentColor,
-                                onPressed: () => _handleSubmit(context),
-                            ),
-                        )
+                            new Builder(builder: (BuildContext context) {
+                                return new RaisedButton(
+                                    child: new Text(
+                                        "Submit",
+                                        style: new TextStyle(
+                                            color: Colors.white
+                                        )
+                                    ),
+                                    color: Theme.of(context).accentColor,
+                                    onPressed: () => _handleSubmit(context),
+                                );
+                            }),
+                        ),
                     ],
                 ),
             ),
@@ -79,8 +84,22 @@ class _RegistrationComponentState extends State<RegistrationComponent> {
     void _handleSubmit(BuildContext context) {
         profileService.CreateProfile(username, password, displayname).then(
             (success) => success
-                ? Navigator.of(context).pushReplacementNamed("/home")
-                : Scaffold.of(context).showSnackBar(new SnackBar(content: new Text("Error: failed to register profile")))
+                ? this._handleSuccess(context)
+                : this._handleFailure(context)
         );
+    }
+
+    void _handleSuccess(BuildContext context) {
+        showSuccessSnackBar(context, "profile successfully created");
+        new Timer(
+            const Duration(
+                seconds: 1, milliseconds: 500
+            ),
+            () => Navigator.of(context).pushReplacementNamed("/home")
+        );
+    }
+
+    void _handleFailure(BuildContext context) {
+        showFailureSnackBar(context, "failed to register user");
     }
 }
