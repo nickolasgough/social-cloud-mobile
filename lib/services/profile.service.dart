@@ -6,15 +6,15 @@ import 'package:mobile/services/http.service.dart';
 
 
 class ProfileService {
-    static final ProfileService profileService = new ProfileService._internal();
+    static final ProfileService _profileService = new ProfileService._internal();
 
-    static final HttpService httpService = new HttpService();
+    static final HttpService _httpService = new HttpService();
 
     static String _username;
     static String _displayname;
 
     factory ProfileService() {
-        return profileService;
+        return _profileService;
     }
 
     ProfileService._internal();
@@ -25,10 +25,9 @@ class ProfileService {
             "password": password,
             "displayname": displayname
         };
-        Response response = await httpService.Post("profile/create", body);
+        Map<String, dynamic> response = await _httpService.Post("profile/create", body);
 
-        Map<String, dynamic> map = json.decode(response.body);
-        bool success = map["success"];
+        bool success = response["success"];
         if (success) {
             _username = username;
             _displayname = displayname;
@@ -37,5 +36,13 @@ class ProfileService {
             _displayname = null;
         }
         return success;
+    }
+
+    String getUsername() {
+        return _username;
+    }
+
+    String getDisplayname() {
+        return _displayname;
     }
 }

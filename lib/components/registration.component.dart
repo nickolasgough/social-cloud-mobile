@@ -53,7 +53,13 @@ class _RegistrationComponentState extends State<RegistrationComponent> {
                         ),
                         _buildColumn(
                             new RaisedButton(
-                                child: new Text("Submit"),
+                                child: new Text(
+                                    "Submit",
+                                    style: new TextStyle(
+                                        color: Colors.white
+                                    )
+                                ),
+                                color: Theme.of(context).accentColor,
                                 onPressed: () => _handleSubmit(context),
                             ),
                         )

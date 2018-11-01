@@ -5,27 +5,34 @@ import 'package:http/http.dart';
 
 
 class HttpService {
-    static final HttpService httpService = new HttpService._internal();
+    static final HttpService _httpService = new HttpService._internal();
 
     static final Client _client = new Client();
-    static final _url = "http://10.227.142.35:8080";
-    static final Map<String, dynamic> headers = {
+    static final Map<String, dynamic> _headers = {
         "Content-Type": "application/json",
     };
 
     factory HttpService() {
-        return httpService;
+        return _httpService;
     }
 
     HttpService._internal();
 
-    Future<Response> Post(String path, Map<String, dynamic> body) {
-        final String route = "$_url/$path";
+    Future<Map<String, dynamic>> Post(String path, Map<String, dynamic> body) async {
+        final String route = "$_baseUrl/$path";
         print(route);
-        return _client.post(route,
-            headers: headers,
+        Response response = await _client.post(route,
+            headers: _headers,
             body: json.encode(body),
             encoding: Encoding.getByName("utf-8")
         );
+        return json.decode(response.body);
+    }
+
+    String get _baseUrl {
+        String scheme = "http";
+        String ipAddress = "10.0.0.165";
+        String port = "8080";
+        return "$scheme://$ipAddress:$port";
     }
 }

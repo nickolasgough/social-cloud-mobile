@@ -11,10 +11,6 @@ class HomeComponent extends StatefulWidget {
 }
 
 class _HomeComponentState extends State<HomeComponent> {
-    String username;
-    String password;
-    String displayname;
-
     @override
     Widget build(BuildContext context) {
         return new Scaffold(
@@ -26,15 +22,14 @@ class _HomeComponentState extends State<HomeComponent> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                         _buildColumn(
-                            new TextField(
-                                decoration: new InputDecoration(
-                                    hintText: "Username"
-                                ),
-                                onChanged: (value) => this.username = value,
-                            )
+                            new Text("Hello"),
                         ),
                     ],
                 ),
+            ),
+            floatingActionButton: new FloatingActionButton(
+                child: new Icon(Icons.edit),
+                onPressed: () => _createPost(context),
             ),
         );
     }
@@ -44,5 +39,9 @@ class _HomeComponentState extends State<HomeComponent> {
             padding: new EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
             child: w,
         );
+    }
+
+    void _createPost(BuildContext context) {
+        Navigator.of(context).pushNamed("/post/compose");
     }
 }
