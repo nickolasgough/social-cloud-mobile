@@ -14,9 +14,9 @@ class RegistrationComponent extends StatefulWidget {
 }
 
 class _RegistrationComponentState extends State<RegistrationComponent> {
-    String username;
-    String password;
-    String displayname;
+    String _username;
+    String _password;
+    String _displayname;
 
     ProfileService profileService = new ProfileService();
 
@@ -35,7 +35,7 @@ class _RegistrationComponentState extends State<RegistrationComponent> {
                                 decoration: new InputDecoration(
                                     hintText: "Username"
                                 ),
-                                onChanged: (value) => this.username = value,
+                                onChanged: (value) => this._username = value,
                             )
                         ),
                         _buildColumn(
@@ -43,7 +43,7 @@ class _RegistrationComponentState extends State<RegistrationComponent> {
                                 decoration: new InputDecoration(
                                     hintText: "Password"
                                 ),
-                                onChanged: (value) => this.password = value,
+                                onChanged: (value) => this._password = value,
                             )
                         ),
                         _buildColumn(
@@ -51,7 +51,7 @@ class _RegistrationComponentState extends State<RegistrationComponent> {
                                 decoration: new InputDecoration(
                                     hintText: "Display Name"
                                 ),
-                                onChanged: (value) => this.displayname = value,
+                                onChanged: (value) => this._displayname = value,
                             )
                         ),
                         _buildColumn(
@@ -82,7 +82,8 @@ class _RegistrationComponentState extends State<RegistrationComponent> {
     }
 
     void _handleSubmit(BuildContext context) {
-        profileService.CreateProfile(username, password, displayname).then(
+        DateTime now = new DateTime.now();
+        profileService.CreateProfile(this._username, this._password, this._displayname, now).then(
             (success) => success
                 ? this._handleSuccess(context)
                 : this._handleFailure(context)

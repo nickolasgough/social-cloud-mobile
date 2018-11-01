@@ -17,11 +17,12 @@ class ProfileService {
 
     ProfileService._internal();
 
-    Future<bool> CreateProfile(String username, String password, String displayname) async {
+    Future<bool> CreateProfile(String username, String password, String displayname, DateTime datetime) async {
         Map<String, dynamic> body = {
             "username": username,
             "password": password,
-            "displayname": displayname
+            "displayname": displayname,
+            "datetime": datetime.toUtc().toIso8601String()
         };
         Map<String, dynamic> response = await _httpService.post("profile/create", body);
 
