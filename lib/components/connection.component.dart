@@ -2,29 +2,29 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import 'package:mobile/services/post.service.dart';
+import 'package:mobile/services/connection.service.dart';
 import 'package:mobile/services/profile.service.dart';
 import 'package:mobile/util/snackbar.util.dart';
 
 
-class ComposerComponent extends StatefulWidget {
-    ComposerComponent() : super();
+class ConnectionComponent extends StatefulWidget {
+    ConnectionComponent() : super();
 
     @override
-    _ComposerComponentState createState() => new _ComposerComponentState();
+    _ConnectionComponentState createState() => new _ConnectionComponentState();
 }
 
-class _ComposerComponentState extends State<ComposerComponent> {
-    String _post;
+class _ConnectionComponentState extends State<ConnectionComponent> {
+    String _connection;
 
     ProfileService _profileService = new ProfileService();
-    PostService _postService = new PostService();
+    ConnectionService _connectionService = new ConnectionService();
 
     @override
     Widget build(BuildContext context) {
         return new Scaffold(
             appBar: new AppBar(
-                title: new Text("Composer"),
+                title: new Text("Connection"),
             ),
             body: new Center(
                 child: new Column(
@@ -34,13 +34,12 @@ class _ComposerComponentState extends State<ComposerComponent> {
                             new Container(
                                 child: new TextField(
                                     decoration: new InputDecoration(
-                                        hintText: "Compose Post",
+                                        hintText: "Enter connection",
                                         contentPadding: new EdgeInsets.all(10.0),
                                         border: InputBorder.none,
                                     ),
                                     keyboardType: TextInputType.multiline,
-                                    maxLines: 8,
-                                    onChanged: (String value) => this._post = value,
+                                    onChanged: (String value) => this._connection= value,
                                 ),
                                 decoration: new BoxDecoration(
                                     border: new Border.all(color: Theme.of(context).accentColor),
@@ -55,7 +54,7 @@ class _ComposerComponentState extends State<ComposerComponent> {
                 builder: (BuildContext context) {
                     return new FloatingActionButton(
                         child: new Icon(Icons.send),
-                        onPressed: () => this._createPost(context),
+                        onPressed: () => this._requestConnection(context),
                     );
                 }
             ),
@@ -69,22 +68,22 @@ class _ComposerComponentState extends State<ComposerComponent> {
         );
     }
 
-    void _createPost(context) {
+    void _requestConnection(context) {
         String username = this._profileService.getUsername();
         DateTime now = new DateTime.now();
-        this._postService.CreatePost(username, this._post, now).then(
-            (success) => success
+        this._connectionService.RequestConnection(username, this._connection, now).then(
+                (success) => success
                 ? this._handleSuccess(context)
                 : this._handleFailure(context)
         );
     }
 
     void _handleSuccess(BuildContext context) {
-        showSuccessSnackBar(context, "post successfully created");
+        showSuccessSnackBar(context, "connection request sent");
         new Timer(const Duration(seconds: 1, milliseconds: 500), () => Navigator.of(context).pop());
     }
 
     void _handleFailure(BuildContext context) {
-        showFailureSnackBar(context, "failed to create post");
+        showFailureSnackBar(context, "failed to send request");
     }
 }

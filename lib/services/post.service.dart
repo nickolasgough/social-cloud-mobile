@@ -1,6 +1,4 @@
-import 'package:http/http.dart';
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:mobile/services/http.service.dart';
 
@@ -22,7 +20,7 @@ class PostService {
             "post": post,
             "datetime": datetime.toUtc().toIso8601String()
         };
-        Map<String, dynamic> response = await _httpService.Post("post/create", body);
+        Map<String, dynamic> response = await _httpService.post("post/create", body);
 
         bool success = response["success"];
         return success;

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'dart:async';
 
+import 'package:mobile/components/connection.component.dart';
 import 'package:mobile/components/registration.component.dart';
 import 'package:mobile/components/home.component.dart';
 import 'package:mobile/components/composer.component.dart';
@@ -17,6 +17,7 @@ class MyApp extends StatelessWidget {
             routes: <String, WidgetBuilder>{
                 "/": (_) => new RegistrationComponent(),
                 "/home": (_) => new HomeComponent(),
+                "/connection/add": (_) => new ConnectionComponent(),
                 "/post/compose": (_) => new ComposerComponent(),
             },
         );

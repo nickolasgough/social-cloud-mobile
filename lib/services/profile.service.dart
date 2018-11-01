@@ -1,6 +1,4 @@
-import 'package:http/http.dart';
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:mobile/services/http.service.dart';
 
@@ -25,7 +23,7 @@ class ProfileService {
             "password": password,
             "displayname": displayname
         };
-        Map<String, dynamic> response = await _httpService.Post("profile/create", body);
+        Map<String, dynamic> response = await _httpService.post("profile/create", body);
 
         bool success = response["success"];
         if (success) {

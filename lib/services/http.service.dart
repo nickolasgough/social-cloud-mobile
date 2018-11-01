@@ -18,7 +18,7 @@ class HttpService {
 
     HttpService._internal();
 
-    Future<Map<String, dynamic>> Post(String path, Map<String, dynamic> body) async {
+    Future<Map<String, dynamic>> post(String path, Map<String, dynamic> body) async {
         final String route = "$_baseUrl/$path";
         print(route);
         Response response = await _client.post(route,
