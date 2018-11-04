@@ -1,4 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:mobile/services/notification.service.dart';
+import 'package:mobile/services/profile.service.dart';
 
 
 class HomeComponent extends StatefulWidget {
@@ -9,21 +13,29 @@ class HomeComponent extends StatefulWidget {
 }
 
 class _HomeComponentState extends State<HomeComponent> {
+    ProfileService _profileService = new ProfileService();
+    NotificationService _notificationService = new NotificationService();
+
     @override
     Widget build(BuildContext context) {
         return new Scaffold(
             appBar: new AppBar(
                 title: new Text("Home"),
             ),
-            body: new Center(
-                child: new Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                        this._buildColumn(
-                            new Text("Hello"),
-                        ),
-                    ],
-                ),
+            body: new FutureBuilder(
+                future: this._getNotifications(),
+                builder: (BuildContext context, AsyncSnapshot snapshot) {
+                    if (snapshot.hasData) {
+                        return new Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                                new Text("No notifications")
+                            ],
+                        );
+                    } else {
+                        return new CircularProgressIndicator();
+                    }
+                },
             ),
             floatingActionButton: new Column(
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -55,6 +67,11 @@ class _HomeComponentState extends State<HomeComponent> {
             padding: new EdgeInsets.only(top: 10.0),
             child: b,
         );
+    }
+
+    Future<List<Notice>> _getNotifications() async {
+        String username = this._profileService.getUsername();
+        return this._notificationService.ListNotices(username);
     }
 
     void _addConnection(BuildContext context) {

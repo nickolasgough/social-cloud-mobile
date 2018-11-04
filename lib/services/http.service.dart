@@ -20,25 +20,47 @@ class HttpService {
 
     Future<Map<String, dynamic>> post(String path, Map<String, dynamic> body) async {
         final String route = "$_baseUrl/$path";
-        print(route);
         Response response = await _client.post(route,
             headers: _headers,
             body: json.encode(body),
-            encoding: Encoding.getByName("utf-8")
+            encoding: Encoding.getByName("utf-8"),
         );
         try {
             return json.decode(response.body);
         } catch (e) {
             return {
                 "success": false,
-                "error": e.toString()
+                "error": e.toString(),
+            };
+        }
+    }
+
+    Future<Map<String, dynamic>> get(String path, Map<String, dynamic> body) async {
+        String route = "$_baseUrl/$path";
+        if (body.length > 0) {
+            route += "?";
+        }
+        List<String> parameters = [];
+        body.forEach((String key, dynamic value) {
+            parameters.add("$key=$value");
+        });
+        route += parameters.join("&");
+        Response response = await _client.get(route,
+            headers: _headers,
+        );
+        try {
+            return json.decode(response.body);
+        } catch (e) {
+            return {
+                "success": false,
+                "error": e.toString(),
             };
         }
     }
 
     String get _baseUrl {
         String scheme = "http";
-        String ipAddress = "10.227.148.102";
+        String ipAddress = "10.0.0.165";
         String port = "8080";
         return "$scheme://$ipAddress:$port";
     }
