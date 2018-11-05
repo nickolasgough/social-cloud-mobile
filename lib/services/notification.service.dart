@@ -28,7 +28,7 @@ class NotificationService {
     List<Notice> _parseNotices(List<Map<String, dynamic>> data) {
         List<Notice> notices = new List<Notice>();
         DateTime datetime;
-        for (var n = 0; n < data.length; n += 1) {
+        for (int n = 0; n < data.length; n += 1) {
             Map<String, dynamic> d = data[n];
             datetime = DateTime.parse(d["datetime"]).toLocal();
             notices.add(new Notice(d["username"], d["type"], d["sender"], d["dismissed"], datetime));

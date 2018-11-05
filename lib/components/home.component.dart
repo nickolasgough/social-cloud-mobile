@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:mobile/services/notification.service.dart';
 import 'package:mobile/services/profile.service.dart';
+import 'package:mobile/util/datetime.util.dart';
 
 
 class HomeComponent extends StatefulWidget {
@@ -26,12 +27,7 @@ class _HomeComponentState extends State<HomeComponent> {
                 future: this._getNotifications(),
                 builder: (BuildContext context, AsyncSnapshot snapshot) {
                     if (snapshot.hasData) {
-                        return new Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                                new Text("No notifications")
-                            ],
-                        );
+                        return _buildNotifications(snapshot.data as List<Notice>);
                     } else {
                         return new CircularProgressIndicator();
                     }
@@ -55,14 +51,14 @@ class _HomeComponentState extends State<HomeComponent> {
         );
     }
 
-    Container _buildColumn(Widget w) {
+    Widget _buildColumn(Widget w) {
         return new Container(
-            padding: new EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+            padding: new EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
             child: w,
         );
     }
 
-    Container _buildButton(FloatingActionButton b) {
+    Widget _buildButton(FloatingActionButton b) {
         return new Container(
             padding: new EdgeInsets.only(top: 10.0),
             child: b,
@@ -72,6 +68,97 @@ class _HomeComponentState extends State<HomeComponent> {
     Future<List<Notice>> _getNotifications() async {
         String username = this._profileService.getUsername();
         return this._notificationService.listNotices(username);
+    }
+
+    Widget _buildNotifications(List<Notice> notices) {
+        List<Widget> children = new List<Widget>();
+        for (Notice notice in notices) {
+            if (notice.type == "connection-request") {
+                children.add(_buildConnection(notice));
+            } else {
+                children.add(_buildNotification(notice));
+            }
+        }
+
+        return new Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: children,
+        );
+    }
+
+    Widget _buildBody(Widget w) {
+        return new Container(
+            padding: new EdgeInsets.symmetric(vertical: 10.0, horizontal: 30.0),
+            child: w,
+        );
+    }
+
+    Widget _buildConnection(Notice notice) {
+        String sender = notice.sender;
+        String datetime = shortTime(notice.datetime);
+        Card card = new Card(
+            child: new Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                    new ListTile(
+                        leading: new Icon(Icons.person_add),
+                        title: new Text("Connection Request Received"),
+                        subtitle: new Text("Somebody has requested to connect"),
+                    ),
+                    this._buildBody(new Text("$sender has requested to connect with you on $datetime")),
+                    new ButtonTheme.bar(
+                        child: new ButtonBar(
+                            children: <Widget>[
+                                new FlatButton(
+                                    onPressed: _declineConnection,
+                                    child: new Text("DECLINE"),
+                                ),
+                                new FlatButton(
+                                    onPressed: _acceptConnection,
+                                    child: new Text("ACCEPT"),
+                                ),
+                            ],
+                        ),
+                    ),
+                ],
+            ),
+        );
+
+        return this._buildColumn(card);
+    }
+
+    void _acceptConnection() {}
+
+    void _declineConnection() {}
+
+    Widget _buildNotification(Notice notice) {
+        String sender = notice.sender;
+        String datetime = shortTime(notice.datetime);
+        Card card = new Card(
+            child: new Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                    new ListTile(
+                        leading: new Icon(Icons.person_add),
+                        title: new Text("Generic Notification received"),
+                        subtitle: new Text("Generic Notification received"),
+                    ),
+                    this._buildBody(new Text("$sender sent you a generic notification on $datetime")),
+                    new ButtonTheme.bar(
+                        child: new ButtonBar(
+                            children: <Widget>[
+                                new FlatButton(
+                                    onPressed: _acceptConnection,
+                                    child: new Text("DISMISS"),
+                                ),
+                            ],
+                        ),
+                    ),
+                ],
+            ),
+        );
+
+        return this._buildColumn(card);
     }
 
     void _addConnection(BuildContext context) {
