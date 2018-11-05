@@ -22,7 +22,7 @@ class NotificationService {
         };
         Map<String, dynamic> response = await _httpService.get("notification/list", body);
 
-        return _parseNotices(response["notifications"]);;
+        return _parseNotices(response["notifications"]);
     }
 
     List<Notice> _parseNotices(List<Map<String, dynamic>> data) {

@@ -1,9 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:mobile/services/connection.service.dart';
 import 'package:mobile/services/notification.service.dart';
 import 'package:mobile/services/profile.service.dart';
 import 'package:mobile/util/datetime.util.dart';
+import 'package:mobile/util/snackbar.util.dart';
 
 
 class HomeComponent extends StatefulWidget {
@@ -16,6 +18,7 @@ class HomeComponent extends StatefulWidget {
 class _HomeComponentState extends State<HomeComponent> {
     ProfileService _profileService = new ProfileService();
     NotificationService _notificationService = new NotificationService();
+    ConnectionService _connectionService = new ConnectionService();
 
     @override
     Widget build(BuildContext context) {
@@ -23,15 +26,8 @@ class _HomeComponentState extends State<HomeComponent> {
             appBar: new AppBar(
                 title: new Text("Home"),
             ),
-            body: new FutureBuilder(
-                future: this._getNotifications(),
-                builder: (BuildContext context, AsyncSnapshot snapshot) {
-                    if (snapshot.hasData) {
-                        return _buildNotifications(snapshot.data as List<Notice>);
-                    } else {
-                        return new CircularProgressIndicator();
-                    }
-                },
+            body: new Builder(
+                builder: this._scaffoldBuilder,
             ),
             floatingActionButton: new Column(
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -48,6 +44,21 @@ class _HomeComponentState extends State<HomeComponent> {
                     )),
                 ],
             ),
+        );
+    }
+
+    Widget _scaffoldBuilder(BuildContext context) {
+        return new FutureBuilder(
+            future: new Future.delayed(new Duration(seconds: 3), this._getNotifications),
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+                if (snapshot.hasData) {
+                    return _buildNotifications(context, snapshot.data as List<Notice>);
+                } else {
+                    return new Center(
+                        child: new CircularProgressIndicator(),
+                    );
+                }
+            },
         );
     }
 
@@ -70,13 +81,13 @@ class _HomeComponentState extends State<HomeComponent> {
         return this._notificationService.listNotices(username);
     }
 
-    Widget _buildNotifications(List<Notice> notices) {
+    Widget _buildNotifications(BuildContext context, List<Notice> notices) {
         List<Widget> children = new List<Widget>();
         for (Notice notice in notices) {
             if (notice.type == "connection-request") {
-                children.add(_buildConnection(notice));
+                children.add(_buildConnection(context, notice));
             } else {
-                children.add(_buildNotification(notice));
+                children.add(_buildNotification(context, notice));
             }
         }
 
@@ -86,14 +97,7 @@ class _HomeComponentState extends State<HomeComponent> {
         );
     }
 
-    Widget _buildBody(Widget w) {
-        return new Container(
-            padding: new EdgeInsets.symmetric(vertical: 10.0, horizontal: 30.0),
-            child: w,
-        );
-    }
-
-    Widget _buildConnection(Notice notice) {
+    Widget _buildConnection(BuildContext context, Notice notice) {
         String sender = notice.sender;
         String datetime = shortTime(notice.datetime);
         Card card = new Card(
@@ -102,19 +106,19 @@ class _HomeComponentState extends State<HomeComponent> {
                 children: <Widget>[
                     new ListTile(
                         leading: new Icon(Icons.person_add),
-                        title: new Text("Connection Request Received"),
-                        subtitle: new Text("Somebody has requested to connect"),
+                        title: new Text("Connection Request"),
+                        subtitle: new Text(datetime),
                     ),
-                    this._buildBody(new Text("$sender has requested to connect with you on $datetime")),
+                    this._buildBody(new Text("$sender requested to connect with you")),
                     new ButtonTheme.bar(
                         child: new ButtonBar(
                             children: <Widget>[
                                 new FlatButton(
-                                    onPressed: _declineConnection,
+                                    onPressed: () => this._declineConnection(context, notice),
                                     child: new Text("DECLINE"),
                                 ),
                                 new FlatButton(
-                                    onPressed: _acceptConnection,
+                                    onPressed: () => this._acceptConnection(context, notice),
                                     child: new Text("ACCEPT"),
                                 ),
                             ],
@@ -127,11 +131,27 @@ class _HomeComponentState extends State<HomeComponent> {
         return this._buildColumn(card);
     }
 
-    void _acceptConnection() {}
+    void _acceptConnection(BuildContext context, Notice notice) {
+        String username = this._profileService.getUsername();
+        DateTime now = new DateTime.now();
+        this._connectionService.acceptConnection(username, notice.sender, now).then(
+            (success) => success
+                ? this._handleSuccess(context, "connection request accepted")
+                : this._handleFailure(context, "connection request not accepted")
+        );
+    }
 
-    void _declineConnection() {}
+    void _declineConnection(BuildContext context, Notice notice) {
+        String username = this._profileService.getUsername();
+        DateTime now = new DateTime.now();
+        this._connectionService.declineConnection(username, notice.sender, now).then(
+                (success) => success
+                ? this._handleSuccess(context, "connection request declined")
+                : this._handleFailure(context, "connection request not declined")
+        );
+    }
 
-    Widget _buildNotification(Notice notice) {
+    Widget _buildNotification(BuildContext context, Notice notice) {
         String sender = notice.sender;
         String datetime = shortTime(notice.datetime);
         Card card = new Card(
@@ -148,7 +168,7 @@ class _HomeComponentState extends State<HomeComponent> {
                         child: new ButtonBar(
                             children: <Widget>[
                                 new FlatButton(
-                                    onPressed: _acceptConnection,
+                                    onPressed: () => _dismissNotification(context, notice),
                                     child: new Text("DISMISS"),
                                 ),
                             ],
@@ -159,6 +179,23 @@ class _HomeComponentState extends State<HomeComponent> {
         );
 
         return this._buildColumn(card);
+    }
+
+    void _dismissNotification(BuildContext context, Notice notice) {}
+
+    Widget _buildBody(Widget w) {
+        return new Container(
+            padding: new EdgeInsets.symmetric(vertical: 10.0, horizontal: 30.0),
+            child: w,
+        );
+    }
+
+    void _handleSuccess(BuildContext context, String message) {
+        showSuccessSnackBar(context, message);
+    }
+
+    void _handleFailure(BuildContext context, String message) {
+        showFailureSnackBar(context, message);
     }
 
     void _addConnection(BuildContext context) {
