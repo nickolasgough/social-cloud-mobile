@@ -14,7 +14,7 @@ class NotificationService {
 
     NotificationService._internal();
 
-    Future<List<Notice>> ListNotices(String username) async {
+    Future<List<Notice>> listNotices(String username) async {
         Map<String, dynamic> body = {
             "username": username,
             "cursor": 0,
@@ -22,37 +22,33 @@ class NotificationService {
         };
         Map<String, dynamic> response = await _httpService.get("notification/list", body);
 
-        return this._parseNotices(response["data"]);
+        return _parseNotices(response["notifications"]);;
     }
 
     List<Notice> _parseNotices(List<Map<String, dynamic>> data) {
-        List<Notice> notices = [];
-        data.forEach((Map<String, dynamic> notice) {
-            Type type = notice["type"] == "connection" ? Type.Connection : Type.Like;
-            DateTime datetime = DateTime.parse(notice["datetime"]);
-            notices.add(new Notice(notice["username"], type, notice["sender"], notice["dismissed"], datetime));
-        });
+        List<Notice> notices = new List<Notice>();
+        DateTime datetime;
+        for (var n = 0; n < data.length; n += 1) {
+            Map<String, dynamic> d = data[n];
+            datetime = DateTime.parse(d["datetime"]).toLocal();
+            notices.add(new Notice(d["username"], d["type"], d["sender"], d["dismissed"], datetime));
+        }
         return notices;
     }
 }
 
 class Notice {
     String username;
-    Type type;
+    String type;
     String sender;
     bool dismissed;
     DateTime datetime;
 
-    Notice(String username, Type type, String sender, bool dismissed, DateTime datetime) {
+    Notice(String username, String type, String sender, bool dismissed, DateTime datetime) {
         this.username = username;
         this.type = type;
         this.sender = sender;
         this.dismissed = dismissed;
         this.datetime = datetime;
     }
-}
-
-enum Type {
-    Connection,
-    Like
 }

@@ -71,7 +71,7 @@ class _ConnectionComponentState extends State<ConnectionComponent> {
     void _requestConnection(context) {
         String username = this._profileService.getUsername();
         DateTime now = new DateTime.now();
-        this._connectionService.RequestConnection(username, this._connection, now).then(
+        this._connectionService.requestConnection(this._connection, username, now).then(
                 (success) => success
                 ? this._handleSuccess(context)
                 : this._handleFailure(context)

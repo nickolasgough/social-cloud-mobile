@@ -15,7 +15,7 @@ class ConnectionService {
 
     ConnectionService._internal();
 
-    Future<bool> RequestConnection(String username, String connection, DateTime datetime) async {
+    Future<bool> requestConnection(String username, String connection, DateTime datetime) async {
         Map<String, dynamic> body = {
             "username": username,
             "connection": connection,

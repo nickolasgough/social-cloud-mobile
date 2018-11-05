@@ -6,17 +6,16 @@ import 'package:mobile/services/profile.service.dart';
 import 'package:mobile/util/snackbar.util.dart';
 
 
-class RegistrationComponent extends StatefulWidget {
-    RegistrationComponent() : super();
+class LoginComponent extends StatefulWidget {
+    LoginComponent() : super();
 
     @override
-    _RegistrationComponentState createState() => new _RegistrationComponentState();
+    _LoginComponentState createState() => new _LoginComponentState();
 }
 
-class _RegistrationComponentState extends State<RegistrationComponent> {
+class _LoginComponentState extends State<LoginComponent> {
     String _username;
     String _password;
-    String _displayname;
 
     ProfileService profileService = new ProfileService();
 
@@ -24,7 +23,7 @@ class _RegistrationComponentState extends State<RegistrationComponent> {
     Widget build(BuildContext context) {
         return new Scaffold(
             appBar: new AppBar(
-                title: new Text("Register"),
+                title: new Text("Login"),
             ),
             body: new Center(
                 child: new Column(
@@ -44,14 +43,6 @@ class _RegistrationComponentState extends State<RegistrationComponent> {
                                     hintText: "Password"
                                 ),
                                 onChanged: (value) => this._password = value,
-                            )
-                        ),
-                        _buildColumn(
-                            new TextField(
-                                decoration: new InputDecoration(
-                                    hintText: "Display Name"
-                                ),
-                                onChanged: (value) => this._displayname = value,
                             )
                         ),
                         _buildColumn(
@@ -82,16 +73,15 @@ class _RegistrationComponentState extends State<RegistrationComponent> {
     }
 
     void _handleSubmit(BuildContext context) {
-        DateTime now = new DateTime.now();
-        profileService.createProfile(this._username, this._password, this._displayname, now).then(
-            (success) => success
+        profileService.loginProfile(this._username, this._password).then(
+                (success) => success
                 ? this._handleSuccess(context)
                 : this._handleFailure(context)
         );
     }
 
     void _handleSuccess(BuildContext context) {
-        showSuccessSnackBar(context, "profile successfully created");
+        showSuccessSnackBar(context, "profile login successful");
         new Timer(
             const Duration(
                 seconds: 1, milliseconds: 500
@@ -101,6 +91,6 @@ class _RegistrationComponentState extends State<RegistrationComponent> {
     }
 
     void _handleFailure(BuildContext context) {
-        showFailureSnackBar(context, "failed to register profile");
+        showFailureSnackBar(context, "failed to login profile");
     }
 }

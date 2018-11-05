@@ -71,7 +71,7 @@ class _HomeComponentState extends State<HomeComponent> {
 
     Future<List<Notice>> _getNotifications() async {
         String username = this._profileService.getUsername();
-        return this._notificationService.ListNotices(username);
+        return this._notificationService.listNotices(username);
     }
 
     void _addConnection(BuildContext context) {
