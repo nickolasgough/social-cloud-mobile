@@ -27,6 +27,10 @@ class NotificationService {
 
     List<Notice> _parseNotices(List<Map<String, dynamic>> data) {
         List<Notice> notices = new List<Notice>();
+        if (data == null) {
+            return notices;
+        }
+
         DateTime datetime;
         for (int n = 0; n < data.length; n += 1) {
             Map<String, dynamic> d = data[n];

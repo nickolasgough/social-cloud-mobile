@@ -20,6 +20,8 @@ class _HomeComponentState extends State<HomeComponent> {
     NotificationService _notificationService = new NotificationService();
     ConnectionService _connectionService = new ConnectionService();
 
+    Future<List<Notice>> _notices;
+
     @override
     Widget build(BuildContext context) {
         return new Scaffold(
@@ -38,6 +40,11 @@ class _HomeComponentState extends State<HomeComponent> {
                         heroTag: "add-connection",
                     )),
                     this._buildButton(new FloatingActionButton(
+                        child: new Icon(Icons.group_add),
+                        onPressed: () => this._createGroup(context),
+                        heroTag: "add-group",
+                    )),
+                    this._buildButton(new FloatingActionButton(
                         child: new Icon(Icons.edit),
                         onPressed: () => this._createPost(context),
                         heroTag: "create-post",
@@ -48,8 +55,10 @@ class _HomeComponentState extends State<HomeComponent> {
     }
 
     Widget _scaffoldBuilder(BuildContext context) {
+        this._notices = this._listNotifications();
+
         return new FutureBuilder(
-            future: new Future.delayed(new Duration(seconds: 3), this._getNotifications),
+            future: this._notices,
             builder: (BuildContext context, AsyncSnapshot snapshot) {
                 if (snapshot.hasData) {
                     return _buildNotifications(context, snapshot.data as List<Notice>);
@@ -76,7 +85,7 @@ class _HomeComponentState extends State<HomeComponent> {
         );
     }
 
-    Future<List<Notice>> _getNotifications() async {
+    Future<List<Notice>> _listNotifications() async {
         String username = this._profileService.getUsername();
         return this._notificationService.listNotices(username);
     }
@@ -192,6 +201,9 @@ class _HomeComponentState extends State<HomeComponent> {
 
     void _handleSuccess(BuildContext context, String message) {
         showSuccessSnackBar(context, message);
+        this.setState(() {
+            this._notices = this._listNotifications();
+        });
     }
 
     void _handleFailure(BuildContext context, String message) {
@@ -200,6 +212,10 @@ class _HomeComponentState extends State<HomeComponent> {
 
     void _addConnection(BuildContext context) {
         Navigator.of(context).pushNamed("/connection/add");
+    }
+
+    void _createGroup(BuildContext context) {
+        Navigator.of(context).pushNamed("/group/create");
     }
 
     void _createPost(BuildContext context) {
