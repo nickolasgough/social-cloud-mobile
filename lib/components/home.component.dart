@@ -109,6 +109,7 @@ class _HomeComponentState extends State<HomeComponent> {
     Widget _buildConnection(BuildContext context, Notice notice) {
         String sender = notice.sender;
         String datetime = shortTime(notice.datetime);
+
         Card card = new Card(
             child: new Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -163,16 +164,17 @@ class _HomeComponentState extends State<HomeComponent> {
     Widget _buildNotification(BuildContext context, Notice notice) {
         String sender = notice.sender;
         String datetime = shortTime(notice.datetime);
+
         Card card = new Card(
             child: new Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                     new ListTile(
                         leading: new Icon(Icons.person_add),
-                        title: new Text("Generic Notification received"),
-                        subtitle: new Text("Generic Notification received"),
+                        title: this._notificationTitle(notice),
+                        subtitle: new Text(datetime),
                     ),
-                    this._buildBody(new Text("$sender sent you a generic notification on $datetime")),
+                    this._buildBody(this._notificationBody(notice)),
                     new ButtonTheme.bar(
                         child: new ButtonBar(
                             children: <Widget>[
@@ -190,7 +192,38 @@ class _HomeComponentState extends State<HomeComponent> {
         return this._buildColumn(card);
     }
 
-    void _dismissNotification(BuildContext context, Notice notice) {}
+    Widget _notificationTitle(Notice notice) {
+        String title;
+
+        switch (notice.type) {
+            case "connection-accepted":
+                title = "Connection Accepted";
+                break;
+        }
+
+        return new Text(title);
+    }
+
+    Widget _notificationBody(Notice notice) {
+        String body;
+        String sender = notice.sender;
+
+        switch (notice.type) {
+            case "connection-accepted":
+                body = "$sender accepted your connection request";
+                break;
+        }
+
+        return new Text(body);
+    }
+
+    void _dismissNotification(BuildContext context, Notice notice) {
+        this._notificationService.dismissNotice(notice.username, notice.sender, notice.datetime).then(
+            (success) => success
+                ? this._handleSuccess(context, "notifcation successfully dismis")
+                : this._handleFailure(context, "failed to dismiss notification")
+        );
+    }
 
     Widget _buildBody(Widget w) {
         return new Container(

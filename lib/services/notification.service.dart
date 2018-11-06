@@ -39,6 +39,17 @@ class NotificationService {
         }
         return notices;
     }
+
+    Future<bool> dismissNotice(String username, String sender, DateTime datetime) async {
+        Map<String, dynamic> body = {
+            "username": username,
+            "sender": sender,
+            "datetime": datetime.toUtc().toIso8601String(),
+        };
+        Map<String, dynamic> response = await _httpService.get("notification/dismiss", body);
+
+        return response["success"];
+    }
 }
 
 class Notice {

@@ -18,7 +18,7 @@ class PostService {
         Map<String, dynamic> body = {
             "username": username,
             "post": post,
-            "datetime": datetime.toUtc().toIso8601String()
+            "datetime": datetime.toUtc().toIso8601String(),
         };
         Map<String, dynamic> response = await _httpService.post("post/create", body);
 
