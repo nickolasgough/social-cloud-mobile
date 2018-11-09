@@ -60,7 +60,7 @@ class HttpService {
 
     String get _baseUrl {
         String scheme = "http";
-        String ipAddress = "10.227.137.240";
+        String ipAddress = "10.227.142.231";
         String port = "8080";
         return "$scheme://$ipAddress:$port";
     }

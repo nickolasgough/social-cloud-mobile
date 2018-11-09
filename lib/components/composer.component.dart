@@ -72,7 +72,7 @@ class _ComposerComponentState extends State<ComposerComponent> {
     void _createPost(context) {
         String username = this._profileService.getUsername();
         DateTime now = new DateTime.now();
-        this._postService.CreatePost(username, this._post, now).then(
+        this._postService.createPost(username, this._post, now).then(
             (success) => success
                 ? this._handleSuccess(context)
                 : this._handleFailure(context)

@@ -14,7 +14,7 @@ class NotificationService {
 
     NotificationService._internal();
 
-    Future<List<Notice>> listNotices(String username) async {
+    Future<List<Notice>> listNotifications(String username) async {
         Map<String, dynamic> body = {
             "username": username,
             "cursor": 0,
@@ -22,10 +22,10 @@ class NotificationService {
         };
         Map<String, dynamic> response = await _httpService.get("notification/list", body);
 
-        return _parseNotices(response["notifications"]);
+        return _deserializeNotifications(response["notifications"]);
     }
 
-    List<Notice> _parseNotices(List<Map<String, dynamic>> data) {
+    List<Notice> _deserializeNotifications(List<Map<String, dynamic>> data) {
         List<Notice> notices = new List<Notice>();
         if (data == null) {
             return notices;
@@ -40,7 +40,7 @@ class NotificationService {
         return notices;
     }
 
-    Future<bool> dismissNotice(String username, String sender, DateTime datetime) async {
+    Future<bool> dismissNotification(String username, String sender, DateTime datetime) async {
         Map<String, dynamic> body = {
             "username": username,
             "sender": sender,

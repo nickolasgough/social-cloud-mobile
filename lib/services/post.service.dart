@@ -14,7 +14,7 @@ class PostService {
 
     PostService._internal();
 
-    Future<bool> CreatePost(String username, String post, DateTime datetime) async {
+    Future<bool> createPost(String username, String post, DateTime datetime) async {
         Map<String, dynamic> body = {
             "username": username,
             "post": post,

@@ -29,7 +29,7 @@ class _HomeComponentState extends State<HomeComponent> {
                 title: new Text("Home"),
             ),
             body: new Builder(
-                builder: this._scaffoldBuilder,
+                builder: this._buildScaffold,
             ),
             floatingActionButton: new Column(
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -37,12 +37,12 @@ class _HomeComponentState extends State<HomeComponent> {
                     this._buildButton(new FloatingActionButton(
                         child: new Icon(Icons.person_add),
                         onPressed: () => this._addConnection(context),
-                        heroTag: "add-connection",
+                        heroTag: "create-connection",
                     )),
                     this._buildButton(new FloatingActionButton(
                         child: new Icon(Icons.group_add),
-                        onPressed: () => this._createGroup(context),
-                        heroTag: "add-group",
+                        onPressed: () => this._createFeed(context),
+                        heroTag: "create-feed",
                     )),
                     this._buildButton(new FloatingActionButton(
                         child: new Icon(Icons.edit),
@@ -54,14 +54,14 @@ class _HomeComponentState extends State<HomeComponent> {
         );
     }
 
-    Widget _scaffoldBuilder(BuildContext context) {
+    Widget _buildScaffold(BuildContext context) {
         this._notices = this._listNotifications();
 
         return new FutureBuilder(
             future: this._notices,
             builder: (BuildContext context, AsyncSnapshot snapshot) {
                 if (snapshot.hasData) {
-                    return _buildNotifications(context, snapshot.data as List<Notice>);
+                    return this._buildNotifications(context, snapshot.data as List<Notice>);
                 } else {
                     return new Center(
                         child: new CircularProgressIndicator(),
@@ -87,7 +87,7 @@ class _HomeComponentState extends State<HomeComponent> {
 
     Future<List<Notice>> _listNotifications() async {
         String username = this._profileService.getUsername();
-        return this._notificationService.listNotices(username);
+        return this._notificationService.listNotifications(username);
     }
 
     Widget _buildNotifications(BuildContext context, List<Notice> notices) {
@@ -218,9 +218,9 @@ class _HomeComponentState extends State<HomeComponent> {
     }
 
     void _dismissNotification(BuildContext context, Notice notice) {
-        this._notificationService.dismissNotice(notice.username, notice.sender, notice.datetime).then(
+        this._notificationService.dismissNotification(notice.username, notice.sender, notice.datetime).then(
             (success) => success
-                ? this._handleSuccess(context, "notifcation successfully dismis")
+                ? this._handleSuccess(context, "notifcation successfully dismissed")
                 : this._handleFailure(context, "failed to dismiss notification")
         );
     }
@@ -247,8 +247,8 @@ class _HomeComponentState extends State<HomeComponent> {
         Navigator.of(context).pushNamed("/connection/add");
     }
 
-    void _createGroup(BuildContext context) {
-        Navigator.of(context).pushNamed("/group/create");
+    void _createFeed(BuildContext context) {
+        Navigator.of(context).pushNamed("/feed/create");
     }
 
     void _createPost(BuildContext context) {

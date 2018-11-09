@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:mobile/components/connection.component.dart';
+import 'package:mobile/components/group.component.dart';
 import 'package:mobile/components/login.component.dart';
 import 'package:mobile/components/registration.component.dart';
 import 'package:mobile/components/home.component.dart';
@@ -22,6 +23,7 @@ class MyApp extends StatelessWidget {
                 "/register": (_) => new RegistrationComponent(),
                 "/home": (_) => new HomeComponent(),
                 "/connection/add": (_) => new ConnectionComponent(),
+                "/feed/create": (_) => new FeedComponent(),
                 "/post/compose": (_) => new ComposerComponent(),
             },
         );

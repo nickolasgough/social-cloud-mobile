@@ -45,7 +45,7 @@ class ProfileService {
         Map<String, dynamic> response = await _httpService.post("profile/login", body);
 
         String displayname = response["displayname"];
-        if (displayname != null) {
+        if (displayname.isNotEmpty) {
             _username = username;
             _displayname = displayname;
         } else {
