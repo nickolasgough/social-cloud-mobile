@@ -128,7 +128,10 @@ class _FeedComponentState extends State<FeedComponent> {
     Widget _buildColumn(Widget w) {
         return new Container(
             child: w,
-            padding: new EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0),
+            padding: new EdgeInsets.symmetric(
+                vertical: 20.0,
+                horizontal: 20.0,
+            ),
         );
     }
 

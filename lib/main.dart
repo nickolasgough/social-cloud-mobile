@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:mobile/components/connection.component.dart';
-import 'package:mobile/components/group.component.dart';
+import 'package:mobile/components/feed.component.dart';
 import 'package:mobile/components/login.component.dart';
 import 'package:mobile/components/registration.component.dart';
 import 'package:mobile/components/home.component.dart';

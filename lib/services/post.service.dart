@@ -25,4 +25,45 @@ class PostService {
         bool success = response["success"];
         return success;
     }
+
+    Future<List<Post>> listPosts(String username, String feedname) async {
+        Map<String, dynamic> body = {
+            "username": username,
+            "feedname": feedname,
+            "cursor": 0,
+            "limit": 25,
+        };
+        Map<String, dynamic> response = await _httpService.get("post/list", body);
+
+        List<Post> posts = _deserializePosts(response["posts"]);
+        return posts;
+    }
+
+    List<Post> _deserializePosts(List<Map<String, dynamic>> data) {
+        List<Post> posts = new List<Post>();
+        if (data == null) {
+            return posts;
+        }
+
+        DateTime datetime;
+        for (Map<String, dynamic> d in data) {
+            datetime = DateTime.parse(d["datetime"]).toLocal();
+            posts.add(new Post(d["username"], d["displayname"], d["post"], datetime));
+        }
+        return posts;
+    }
+}
+
+class Post {
+    String username;
+    String displayname;
+    String post;
+    DateTime datetime;
+
+    Post(String username, String displayname, String post, DateTime datetime) {
+        this.username = username;
+        this.displayname = displayname;
+        this.post = post;
+        this.datetime = datetime;
+    }
 }
