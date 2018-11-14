@@ -39,16 +39,18 @@ class PostService {
         return posts;
     }
 
-    List<Post> _deserializePosts(List<Map<String, dynamic>> data) {
+    List<Post> _deserializePosts(List<dynamic> data) {
         List<Post> posts = new List<Post>();
         if (data == null) {
             return posts;
         }
 
+        Post post;
         DateTime datetime;
         for (Map<String, dynamic> d in data) {
             datetime = DateTime.parse(d["datetime"]).toLocal();
-            posts.add(new Post(d["username"], d["displayname"], d["post"], datetime));
+            post = new Post(d["username"], d["displayname"], d["post"], datetime);
+            posts.add(post);
         }
         return posts;
     }

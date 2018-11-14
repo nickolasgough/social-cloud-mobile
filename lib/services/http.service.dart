@@ -8,7 +8,7 @@ class HttpService {
     static final HttpService _httpService = new HttpService._internal();
 
     static final Client _client = new Client();
-    static final Map<String, dynamic> _headers = {
+    static final Map<String, String> _headers = {
         "Content-Type": "application/json",
     };
 

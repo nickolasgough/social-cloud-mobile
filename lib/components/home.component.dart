@@ -26,6 +26,16 @@ class _HomeComponentState extends State<HomeComponent> {
                             itemBuilder: (BuildContext context) {
                                 return <PopupMenuEntry<String>>[
                                     new PopupMenuItem<String>(
+                                        value: "/profile/edit",
+                                        child: new Row(
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            children: <Widget>[
+                                                new Icon(Icons.edit),
+                                                this._buildColumn(new Text("Edit Profile")),
+                                            ],
+                                        ),
+                                    ),
+                                    new PopupMenuItem<String>(
                                         value: "/connection/add",
                                         child: new Row(
                                             mainAxisAlignment: MainAxisAlignment.start,

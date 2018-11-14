@@ -25,17 +25,18 @@ class NotificationService {
         return _deserializeNotifications(response["notifications"]);
     }
 
-    List<Notice> _deserializeNotifications(List<Map<String, dynamic>> data) {
+    List<Notice> _deserializeNotifications(List<dynamic> data) {
         List<Notice> notices = new List<Notice>();
         if (data == null) {
             return notices;
         }
 
+        Notice notice;
         DateTime datetime;
-        for (int n = 0; n < data.length; n += 1) {
-            Map<String, dynamic> d = data[n];
+        for (Map<String, dynamic> d in data) {
             datetime = DateTime.parse(d["datetime"]).toLocal();
-            notices.add(new Notice(d["username"], d["type"], d["sender"], d["dismissed"], datetime));
+            notice = new Notice(d["username"], d["type"], d["sender"], d["dismissed"], datetime);
+            notices.add(notice);
         }
         return notices;
     }

@@ -18,7 +18,7 @@ class FeedService {
     FeedService._internal();
 
     String get feedname => _feedname;
-    void set feedname(String f) => _feedname = f;
+    set feedname(String f) => _feedname = f;
 
     Future<bool> createFeed(String username, String feedname, List<Connection> members, DateTime datetime) async {
         Map<String, dynamic> body = {
@@ -56,7 +56,7 @@ class FeedService {
         return feeds;
     }
 
-    List<Feed> _deserializeFeeds(List<Map<String, dynamic>> data) {
+    List<Feed> _deserializeFeeds(List<dynamic> data) {
         List<Feed> feeds = new List<Feed>();
         if (data == null) {
             return feeds;
@@ -74,7 +74,7 @@ class FeedService {
         return feeds;
     }
 
-    List<Member> _deserializeMembers(List<Map<String, dynamic>> data) {
+    List<Member> _deserializeMembers(List<dynamic> data) {
         List<Member> members = new List<Member>();
         if (data == null) {
             return null;

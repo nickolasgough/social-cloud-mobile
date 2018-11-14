@@ -45,6 +45,11 @@ class ProfileService {
         Map<String, dynamic> response = await _httpService.post("profile/login", body);
 
         String displayname = response["displayname"];
+        _handleResponse(username, displayname);
+        return _displayname != null;
+    }
+
+    void _handleResponse(String username, String displayname) {
         if (displayname.isNotEmpty) {
             _username = username;
             _displayname = displayname;
@@ -52,7 +57,6 @@ class ProfileService {
             _username = null;
             _displayname = null;
         }
-        return _displayname != null;
     }
 
     String getUsername() {

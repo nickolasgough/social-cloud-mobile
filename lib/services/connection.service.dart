@@ -58,20 +58,22 @@ class ConnectionService {
         };
         Map<String, dynamic> response = await _httpService.get("connection/list", body);
 
-        return _parseConnections(response["connections"]);
+        List<Connection> connections = _parseConnections(response["connections"]);
+        return connections;
     }
 
-    List<Connection> _parseConnections(List<Map<String, dynamic>> data) {
+    List<Connection> _parseConnections(List<dynamic> data) {
         List<Connection> connections = new List<Connection>();
         if (data == null) {
             return connections;
         }
 
+        Connection connection;
         DateTime datetime;
-        for (int n = 0; n < data.length; n += 1) {
-            Map<String, dynamic> d = data[n];
+        for (Map<String, dynamic> d in data) {
             datetime = DateTime.parse(d["datetime"]).toLocal();
-            connections.add(new Connection(d["username"], d["connection"], d["displayname"], datetime));
+            connection = new Connection(d["username"], d["connection"], d["displayname"], datetime);
+            connections.add(connection);
         }
         return connections;
     }
