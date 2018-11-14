@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:mobile/services/http.service.dart';
+import 'package:mobile/util/file.dart';
 
 
 class PostService {
@@ -14,10 +16,12 @@ class PostService {
 
     PostService._internal();
 
-    Future<bool> createPost(String username, String post, DateTime datetime) async {
+    Future<bool> createPost(String username, String post, File imagefile, DateTime datetime) async {
         Map<String, dynamic> body = {
             "username": username,
             "post": post,
+            "filename": imagefile != null ? parseFilename(imagefile) : null,
+            "imagefile": imagefile != null ? imagefile.readAsBytesSync() : null,
             "datetime": datetime.toUtc().toIso8601String(),
         };
         Map<String, dynamic> response = await _httpService.post("post/create", body);
@@ -51,7 +55,7 @@ class PostService {
         for (Map<String, dynamic> d in data) {
             avatar = _deserializeAvatar(d["avatar"]);
             datetime = DateTime.parse(d["datetime"]).toLocal();
-            post = new Post(d["username"], avatar, d["post"], datetime);
+            post = new Post(d["username"], avatar, d["post"], d["imageurl"], datetime);
             posts.add(post);
         }
         return posts;
@@ -66,12 +70,14 @@ class Post {
     String username;
     Avatar avatar;
     String post;
+    String imageurl;
     DateTime datetime;
 
-    Post(String username, Avatar avatar, String post, DateTime datetime) {
+    Post(String username, Avatar avatar, String post, String imageurl, DateTime datetime) {
         this.username = username;
         this.avatar = avatar;
         this.post = post;
+        this.imageurl = imageurl;
         this.datetime = datetime;
     }
 }

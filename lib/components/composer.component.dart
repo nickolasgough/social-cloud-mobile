@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 import 'package:mobile/services/post.service.dart';
 import 'package:mobile/services/profile.service.dart';
@@ -15,10 +17,11 @@ class ComposerComponent extends StatefulWidget {
 }
 
 class _ComposerComponentState extends State<ComposerComponent> {
-    String _post;
-
     ProfileService _profileService = new ProfileService();
     PostService _postService = new PostService();
+
+    String _post;
+    File _imagefile;
 
     @override
     Widget build(BuildContext context) {
@@ -39,7 +42,7 @@ class _ComposerComponentState extends State<ComposerComponent> {
                                         border: InputBorder.none,
                                     ),
                                     keyboardType: TextInputType.multiline,
-                                    maxLines: 8,
+                                    maxLines: 5,
                                     onChanged: (String value) => this._post = value,
                                 ),
                                 decoration: new BoxDecoration(
@@ -47,6 +50,11 @@ class _ComposerComponentState extends State<ComposerComponent> {
                                     borderRadius: new BorderRadius.all(new Radius.circular(10.0)),
                                 ),
                             ),
+                        ),
+                        this._buildColumn(this._buildPhoto()),
+                        new IconButton(
+                            icon: new Icon(Icons.camera_alt),
+                            onPressed: this._pickImage,
                         ),
                     ],
                 ),
@@ -72,10 +80,44 @@ class _ComposerComponentState extends State<ComposerComponent> {
         );
     }
 
+    Widget _buildPhoto() {
+        Widget child = this._imagefile != null
+            ? this._buildImage()
+            : this._buildDefault();
+
+        return new Container(
+            child: child,
+            decoration: new BoxDecoration(
+                border: new Border.all(color: Theme.of(context).accentColor),
+                borderRadius: new BorderRadius.all(new Radius.circular(10.0)),
+            ),
+        );
+    }
+
+    Widget _buildImage() {
+        return Image.file(this._imagefile,
+            height: 100.0,
+            width: 100.0,
+        );
+    }
+
+    Widget _buildDefault() {
+        return new Icon(Icons.photo,
+            size: 100.0,
+        );
+    }
+
+    void _pickImage() async {
+        File image = await ImagePicker.pickImage(source: ImageSource.gallery);
+        this.setState(() {
+            this._imagefile = image;
+        });
+    }
+
     void _createPost(context) {
         String username = this._profileService.getUsername();
         DateTime now = new DateTime.now();
-        this._postService.createPost(username, this._post, now).then(
+        this._postService.createPost(username, this._post, this._imagefile, now).then(
             (success) => success
                 ? this._handleSuccess(context)
                 : this._handleFailure(context)

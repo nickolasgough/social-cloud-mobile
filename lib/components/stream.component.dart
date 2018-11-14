@@ -118,7 +118,6 @@ class _StreamComponentState extends State<StreamComponent> {
     }
 
     Widget _buildPost(BuildContext context, Post post) {
-        String body = post.post;
         String datetime = longTime(post.datetime);
 
         Card card = new Card(
@@ -130,7 +129,7 @@ class _StreamComponentState extends State<StreamComponent> {
                         title: new Text(post.avatar.displayname),
                         subtitle: new Text(datetime),
                     ),
-                    this._buildBody(new Text(body)),
+                    this._buildBody(post),
                     new ButtonTheme.bar(
                         child: new ButtonBar(
                             children: <Widget>[
@@ -180,12 +179,35 @@ class _StreamComponentState extends State<StreamComponent> {
         );
     }
 
-    Widget _buildBody(Widget w) {
+    Widget _buildBody(Post post) {
+        List<Widget> children = <Widget>[
+            this._buildColumn(new Text(post.post)),
+        ];
+        Widget photo = this._buildPhoto(post.imageurl);
+        if (photo != null) {
+            children.add(this._buildColumn(photo));
+        }
+
+        return new Column(
+            children: children,
+        );
+    }
+
+    Widget _buildPhoto(String imageurl) {
+        if (imageurl == null || imageurl.isEmpty) {
+            return null;
+        }
+
         return new Container(
-            child: w,
-            padding: new EdgeInsets.symmetric(
-                vertical: 10.0,
-                horizontal: 30.0,
+            height: 150.0,
+            width: 150.0,
+            decoration: new BoxDecoration(
+                image: new DecorationImage(
+                    image: new NetworkImage(imageurl),
+                    fit: BoxFit.cover,
+                ),
+                border: new Border.all(color: Theme.of(context).accentColor),
+                borderRadius: new BorderRadius.all(new Radius.circular(10.0)),
             ),
         );
     }
