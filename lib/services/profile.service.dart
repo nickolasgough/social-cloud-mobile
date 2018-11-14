@@ -63,11 +63,17 @@ class ProfileService {
             "username": _username,
             "displayname": displayname,
             "imagefile": imagefile.readAsBytesSync(),
+            "filename": _parseFilename(imagefile),
         };
         Map<String, dynamic> response = await _httpService.post("profile/update", body);
 
         _handleResponse(_username, response["displayname"], response["imageurl"]);
         return response["displayname"] != null || response["imageurl"] != null;
+    }
+
+    _parseFilename(File imagefile) {
+        List<String> path = imagefile.path.split("/");
+        return path[path.length-1];
     }
 
     String getUsername() {
