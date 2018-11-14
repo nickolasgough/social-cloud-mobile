@@ -65,9 +65,12 @@ class _LoginComponentState extends State<LoginComponent> {
         );
     }
 
-    Container _buildColumn(Widget w) {
+    Widget _buildColumn(Widget w) {
         return new Container(
-            padding: new EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+            padding: new EdgeInsets.symmetric(
+                vertical: 10.0,
+                horizontal: 20.0,
+            ),
             child: w,
         );
     }

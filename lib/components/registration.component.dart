@@ -30,7 +30,7 @@ class _RegistrationComponentState extends State<RegistrationComponent> {
                 child: new Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                        _buildColumn(
+                        this._buildColumn(
                             new TextField(
                                 decoration: new InputDecoration(
                                     hintText: "Username"
@@ -38,7 +38,7 @@ class _RegistrationComponentState extends State<RegistrationComponent> {
                                 onChanged: (value) => this._username = value,
                             )
                         ),
-                        _buildColumn(
+                        this._buildColumn(
                             new TextField(
                                 decoration: new InputDecoration(
                                     hintText: "Password"
@@ -46,7 +46,7 @@ class _RegistrationComponentState extends State<RegistrationComponent> {
                                 onChanged: (value) => this._password = value,
                             )
                         ),
-                        _buildColumn(
+                        this._buildColumn(
                             new TextField(
                                 decoration: new InputDecoration(
                                     hintText: "Display Name"
@@ -54,7 +54,7 @@ class _RegistrationComponentState extends State<RegistrationComponent> {
                                 onChanged: (value) => this._displayname = value,
                             )
                         ),
-                        _buildColumn(
+                        this._buildColumn(
                             new Builder(builder: (BuildContext context) {
                                 return new RaisedButton(
                                     child: new Text(
@@ -74,9 +74,12 @@ class _RegistrationComponentState extends State<RegistrationComponent> {
         );
     }
 
-    Container _buildColumn(Widget w) {
+    Widget _buildColumn(Widget w) {
         return new Container(
-            padding: new EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+            padding: new EdgeInsets.symmetric(
+                vertical: 10.0,
+                horizontal: 20.0,
+            ),
             child: w,
         );
     }

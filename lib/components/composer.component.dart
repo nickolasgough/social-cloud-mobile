@@ -62,10 +62,13 @@ class _ComposerComponentState extends State<ComposerComponent> {
         );
     }
 
-    Container _buildColumn(Widget w) {
+    Widget _buildColumn(Widget w) {
         return new Container(
             child: w,
-            padding: new EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+            padding: new EdgeInsets.symmetric(
+                vertical: 10.0,
+                horizontal: 20.0,
+            ),
         );
     }
 

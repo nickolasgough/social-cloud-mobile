@@ -18,10 +18,13 @@ class EditComponent extends StatefulWidget {
 class _EditComponentState extends State<EditComponent> {
     ProfileService _profileService = new ProfileService();
 
-    File _image;
+    String _displayname;
+    File _imagefile;
 
     @override
     Widget build(BuildContext context) {
+        this._displayname = this._profileService.getDisplayname();
+
         return new Scaffold(
             appBar: new AppBar(
                 title: new Text("Edit"),
@@ -31,46 +34,99 @@ class _EditComponentState extends State<EditComponent> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                         this._buildColumn(
-                            new Container(
-                                child: new IconButton(
-                                    icon: new Icon(Icons.image),
-                                    onPressed: this._pickImage,
+                            new TextField(
+                                decoration: new InputDecoration(
+                                    hintText: "Display Name"
                                 ),
-                                decoration: new BoxDecoration(
-                                    border: new Border.all(color: Theme.of(context).accentColor),
-                                    borderRadius: new BorderRadius.all(new Radius.circular(10.0)),
-                                ),
-                            ),
+                                onChanged: (value) => this._displayname = value,
+                            )
                         ),
+                        this._buildColumn(this._buildAvatar()),
+                        new IconButton(
+                            icon: new Icon(Icons.camera_alt),
+                            onPressed: this._pickImage,
+                        ),
+                        this._buildColumn(new Builder(builder: (BuildContext context) {
+                            return new RaisedButton(
+                                child: new Text(
+                                    "Submit",
+                                    style: new TextStyle(
+                                        color: Colors.white
+                                    ),
+                                ),
+                                color: Theme.of(context).accentColor,
+                                onPressed: () => this._updateProfile(context),
+                            );
+                        })),
                     ],
                 ),
-            ),
-            floatingActionButton: new Builder(
-                builder: (BuildContext context) {
-                    return new FloatingActionButton(
-                        child: new Icon(Icons.send),
-                        onPressed: () => this._updateProfile(context),
-                    );
-                }
             ),
         );
     }
 
-    Container _buildColumn(Widget w) {
+    Widget _buildColumn(Widget w) {
         return new Container(
             child: w,
-            padding: new EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+            padding: new EdgeInsets.symmetric(
+                vertical: 10.0,
+                horizontal: 20.0,
+            ),
+        );
+    }
+
+    Widget _buildAvatar() {
+        Widget child = this._imagefile != null
+            ? this._buildImage()
+            : this._buildDefault();
+
+        return new Container(
+            child: child,
+            decoration: new BoxDecoration(
+                border: new Border.all(color: Theme.of(context).accentColor),
+                borderRadius: new BorderRadius.all(new Radius.circular(10.0)),
+            ),
+        );
+    }
+
+    Widget _buildImage() {
+        return Image.file(this._imagefile,
+            height: 200.0,
+            width: 200.0,
+        );
+    }
+
+    Widget _buildDefault() {
+        return new Icon(Icons.person,
+            size: 200.0,
         );
     }
 
     void _pickImage() async {
-        File image = await ImagePicker.pickImage(source: ImageSource.camera);
+        File image = await ImagePicker.pickImage(source: ImageSource.gallery);
         this.setState(() {
-            this._image = image;
+            this._imagefile = image;
         });
     }
 
     void _updateProfile(BuildContext context) {
-        print("updating");
+        this._profileService.updateProfile(this._displayname, this._imagefile).then(
+            (success) => success
+                ? _handleSuccess(context)
+                : _handleFailure(context)
+        );
+    }
+
+    void _handleSuccess(BuildContext context) {
+        showSuccessSnackBar(context, "profile update successful");
+        new Timer(
+            const Duration(
+                seconds: 1, milliseconds: 500
+            ),
+                () => Navigator.of(context).pushNamedAndRemoveUntil("/home", (Route<dynamic> route) => false)
+        );
+    }
+
+    void _handleFailure(BuildContext context) {
+        showFailureSnackBar(context, "failed to update profile");
     }
 }

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:mobile/services/http.service.dart';
 
@@ -10,6 +11,7 @@ class ProfileService {
 
     static String _username;
     static String _displayname;
+    static String _imageurl;
 
     factory ProfileService() {
         return _profileService;
@@ -44,19 +46,28 @@ class ProfileService {
         };
         Map<String, dynamic> response = await _httpService.post("profile/login", body);
 
-        String displayname = response["displayname"];
-        _handleResponse(username, displayname);
-        return _displayname != null;
+        _handleResponse(username, response["displayname"], response["imageurl"]);
+        return response["displayname"] != null || response["imageurl"] != null;
     }
 
-    void _handleResponse(String username, String displayname) {
+    void _handleResponse(String username, String displayname, String imageurl) {
         if (displayname.isNotEmpty) {
             _username = username;
             _displayname = displayname;
-        } else {
-            _username = null;
-            _displayname = null;
+            _imageurl = imageurl;
         }
+    }
+
+    Future<bool> updateProfile(String displayname, File imagefile) async {
+        Map<String, dynamic> body = {
+            "username": _username,
+            "displayname": displayname,
+            "imagefile": imagefile.readAsBytesSync(),
+        };
+        Map<String, dynamic> response = await _httpService.post("profile/update", body);
+
+        _handleResponse(_username, response["displayname"], response["imageurl"]);
+        return response["displayname"] != null || response["imageurl"] != null;
     }
 
     String getUsername() {
@@ -65,5 +76,9 @@ class ProfileService {
 
     String getDisplayname() {
         return _displayname;
+    }
+
+    String getImageurl() {
+        return _imageurl;
     }
 }
