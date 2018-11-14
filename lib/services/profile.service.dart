@@ -51,7 +51,7 @@ class ProfileService {
     }
 
     void _handleResponse(String username, String displayname, String imageurl) {
-        if (displayname.isNotEmpty) {
+        if (displayname != null && displayname.isNotEmpty) {
             _username = username;
             _displayname = displayname;
             _imageurl = imageurl;

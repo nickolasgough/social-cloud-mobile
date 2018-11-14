@@ -118,7 +118,6 @@ class _StreamComponentState extends State<StreamComponent> {
     }
 
     Widget _buildPost(BuildContext context, Post post) {
-        String displayname = post.displayname;
         String body = post.post;
         String datetime = longTime(post.datetime);
 
@@ -127,8 +126,8 @@ class _StreamComponentState extends State<StreamComponent> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                     new ListTile(
-                        leading: new Icon(Icons.person),
-                        title: new Text(displayname),
+                        leading: this._buildAvatar(post.avatar.imageurl),
+                        title: new Text(post.avatar.displayname),
                         subtitle: new Text(datetime),
                     ),
                     this._buildBody(new Text(body)),
@@ -150,6 +149,35 @@ class _StreamComponentState extends State<StreamComponent> {
             ),
         );
         return this._buildColumn(card);
+    }
+
+    Widget _buildAvatar(String imageurl) {
+        if (imageurl == null || imageurl.isEmpty) {
+            return new Container(
+                child: new Icon(Icons.person,
+                    size: 50.0,
+                ),
+                height: 50.0,
+                width: 50.0,
+                decoration: new BoxDecoration(
+                    border: new Border.all(color: Theme.of(context).accentColor),
+                    borderRadius: new BorderRadius.all(new Radius.circular(50.0)),
+                ),
+            );
+        }
+
+        return new Container(
+            height: 50.0,
+            width: 50.0,
+            decoration: new BoxDecoration(
+                image: new DecorationImage(
+                    image: new NetworkImage(imageurl),
+                    fit: BoxFit.cover,
+                ),
+                border: new Border.all(color: Theme.of(context).accentColor),
+                borderRadius: new BorderRadius.all(new Radius.circular(50.0)),
+            ),
+        );
     }
 
     Widget _buildBody(Widget w) {

@@ -46,26 +46,42 @@ class PostService {
         }
 
         Post post;
+        Avatar avatar;
         DateTime datetime;
         for (Map<String, dynamic> d in data) {
+            avatar = _deserializeAvatar(d["avatar"]);
             datetime = DateTime.parse(d["datetime"]).toLocal();
-            post = new Post(d["username"], d["displayname"], d["post"], datetime);
+            post = new Post(d["username"], avatar, d["post"], datetime);
             posts.add(post);
         }
         return posts;
+    }
+
+    Avatar _deserializeAvatar(Map<String, dynamic> data) {
+        return new Avatar(data["displayname"], data["imageurl"]);
     }
 }
 
 class Post {
     String username;
-    String displayname;
+    Avatar avatar;
     String post;
     DateTime datetime;
 
-    Post(String username, String displayname, String post, DateTime datetime) {
+    Post(String username, Avatar avatar, String post, DateTime datetime) {
         this.username = username;
-        this.displayname = displayname;
+        this.avatar = avatar;
         this.post = post;
         this.datetime = datetime;
+    }
+}
+
+class Avatar {
+    String displayname;
+    String imageurl;
+
+    Avatar(String displayname, String imageurl) {
+        this.displayname = displayname;
+        this.imageurl = imageurl;
     }
 }
