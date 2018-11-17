@@ -30,6 +30,49 @@ class PostService {
         return success;
     }
 
+    Future<bool> likePost(String username, Post post, DateTime datetime) async {
+        Map<String, dynamic> body = {
+            "username": username,
+            "post": _serializePost(post),
+            "reaction": "liked",
+            "reacttime": datetime.toUtc().toIso8601String(),
+        };
+        Map<String, dynamic> response = await _httpService.post("post/react", body);
+
+        bool success = response["success"];
+        return success;
+    }
+
+    Future<bool> dislikePost(String username, Post post, DateTime datetime) async {
+        Map<String, dynamic> body = {
+            "username": username,
+            "post": _serializePost(post),
+            "reaction": "disliked",
+            "reacttime": datetime.toUtc().toIso8601String(),
+        };
+        Map<String, dynamic> response = await _httpService.post("post/react", body);
+
+        bool success = response["success"];
+        return success;
+    }
+
+    Map<String, dynamic> _serializePost(Post post) {
+        return {
+            "username": post.username,
+            "avatar": _serializeAvatar(post.avatar),
+            "post": post.post,
+            "imageurl": post.imageurl,
+            "datetime": post.datetime.toUtc().toIso8601String(),
+        };
+    }
+
+    Map<String, dynamic> _serializeAvatar(Avatar avatar) {
+        return {
+            "displayname": avatar.displayname,
+            "imageurl": avatar.imageurl,
+        };
+    }
+
     Future<List<Post>> listPosts(String username, String feedname) async {
         Map<String, dynamic> body = {
             "username": username,
@@ -55,7 +98,7 @@ class PostService {
         for (Map<String, dynamic> d in data) {
             avatar = _deserializeAvatar(d["avatar"]);
             datetime = DateTime.parse(d["datetime"]).toLocal();
-            post = new Post(d["username"], avatar, d["post"], d["imageurl"], datetime);
+            post = new Post(d["username"], avatar, d["post"], d["imageurl"], d["likes"], d["dislikes"], datetime);
             posts.add(post);
         }
         return posts;
@@ -71,13 +114,17 @@ class Post {
     Avatar avatar;
     String post;
     String imageurl;
+    int likes;
+    int dislikes;
     DateTime datetime;
 
-    Post(String username, Avatar avatar, String post, String imageurl, DateTime datetime) {
+    Post(String username, Avatar avatar, String post, String imageurl, int likes, int dislikes, DateTime datetime) {
         this.username = username;
         this.avatar = avatar;
         this.post = post;
         this.imageurl = imageurl;
+        this.likes = likes;
+        this.dislikes = dislikes;
         this.datetime = datetime;
     }
 }

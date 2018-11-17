@@ -42,7 +42,9 @@ class _ConnectionComponentState extends State<ConnectionComponent> {
                                     onChanged: (String value) => this._connection= value,
                                 ),
                                 decoration: new BoxDecoration(
-                                    border: new Border.all(color: Theme.of(context).accentColor),
+                                    border: new Border.all(
+                                        color: Theme.of(context).accentColor,
+                                    ),
                                     borderRadius: new BorderRadius.all(new Radius.circular(10.0)),
                                 ),
                             ),

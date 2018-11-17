@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile/services/feed.service.dart';
 import 'package:mobile/services/post.service.dart';
 import 'package:mobile/services/profile.service.dart';
+import 'package:mobile/util/snackbar.util.dart';
 import 'package:mobile/util/datetime.util.dart';
 
 
@@ -73,14 +74,26 @@ class _StreamComponentState extends State<StreamComponent> {
             ));
         }
 
-        DropdownButton dropdownButton = items.length > 0
-            ? new DropdownButton(
-                hint: new Text("Feed"),
-                items: items,
-                value: this._feedname,
-                onChanged: (feedname) => this.setState(() {
-                    this._feedService.feedname = feedname;
-                }),
+        Widget dropdownButton = items.length > 0
+            ? new Container(
+                child: new DropdownButton(
+                    hint: new Text("Feed"),
+                    items: items,
+                    value: this._feedname,
+                    onChanged: (feedname) => this.setState(() {
+                        this._feedService.feedname = feedname;
+                    }),
+                ),
+                decoration: new BoxDecoration(
+                    color: Colors.white,
+                    border: new Border.all(
+                        color: Theme.of(context).accentColor,
+                    ),
+                    borderRadius: new BorderRadius.all(new Radius.circular(25.0)),
+                ),
+                padding: new EdgeInsets.symmetric(
+                    horizontal: 10.0,
+                ),
             ) : null;
         return new Scaffold(
             body: this._buildStream(this._feedname),
@@ -114,6 +127,9 @@ class _StreamComponentState extends State<StreamComponent> {
 
         return new ListView(
             children: children,
+            padding: new EdgeInsets.only(
+                bottom: 70.0,
+            ),
         );
     }
 
@@ -130,20 +146,7 @@ class _StreamComponentState extends State<StreamComponent> {
                         subtitle: new Text(datetime),
                     ),
                     this._buildBody(post),
-                    new ButtonTheme.bar(
-                        child: new ButtonBar(
-                            children: <Widget>[
-                                new IconButton(
-                                    onPressed: () => this._likePost(context, post),
-                                    icon: new Icon(Icons.thumb_down),
-                                ),
-                                new IconButton(
-                                    onPressed: () => this._dislikePost(context, post),
-                                    icon: new Icon(Icons.thumb_up),
-                                ),
-                            ],
-                        ),
-                    ),
+                    this._buildButtons(context, post),
                 ],
             ),
         );
@@ -212,11 +215,79 @@ class _StreamComponentState extends State<StreamComponent> {
         );
     }
 
+    Widget _buildButtons(BuildContext context, Post post) {
+        ButtonTheme buttonBar = new ButtonTheme.bar(
+            child: new ButtonBar(
+                children: <Widget>[
+                    new Row(
+                        children: <Widget>[
+                            new IconButton(
+                                onPressed: () => this._dislikePost(context, post),
+                                icon: new Icon(Icons.thumb_down),
+                            ),
+                            new Text(post.dislikes.toString()),
+                        ],
+                    ),
+                    new Row(
+                        children: <Widget>[
+                            new IconButton(
+                                onPressed: () => this._likePost(context, post),
+                                icon: new Icon(Icons.thumb_up),
+                            ),
+                            new Text(post.likes.toString()),
+                        ],
+                    ),
+                ],
+            ),
+        );
+
+        return new Container(
+            child: buttonBar,
+            padding: new EdgeInsets.symmetric(
+                horizontal: 10.0,
+            ),
+        );
+    }
+
     void _likePost(BuildContext context, Post post) {
-        print("liked");
+        String username = this._profileService.getUsername();
+        DateTime datetime = new DateTime.now();
+        this._postService.likePost(username, post, datetime).then(
+            (success) {
+                if (success) {
+                    this.setState(() {
+                        post.likes += 1;
+                    });
+                    this._handleSuccess(context, "liked");
+                } else {
+                    this._handleFailure(context, "like");
+                }
+            }
+        );
     }
 
     void _dislikePost(BuildContext context, Post post) {
-        print("disliked");
+        String username = this._profileService.getUsername();
+        DateTime datetime = new DateTime.now();
+        this._postService.dislikePost(username, post, datetime).then(
+            (success) {
+                if (success) {
+                    this.setState(() {
+                        post.dislikes += 1;
+                    });
+                    this._handleSuccess(context, "disliked");
+                } else {
+                    this._handleFailure(context, "dislike");
+                }
+            }
+        );
+    }
+
+    void _handleSuccess(BuildContext context, String reaction) {
+        showSuccessSnackBar(context, "Successfully ${reaction} the post");
+    }
+
+    void _handleFailure(BuildContext context, String reaction) {
+        showFailureSnackBar(context, "Failed to ${reaction} the post");
     }
 }
