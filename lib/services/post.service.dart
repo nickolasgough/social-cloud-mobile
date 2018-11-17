@@ -98,7 +98,7 @@ class PostService {
         for (Map<String, dynamic> d in data) {
             avatar = _deserializeAvatar(d["avatar"]);
             datetime = DateTime.parse(d["datetime"]).toLocal();
-            post = new Post(d["username"], avatar, d["post"], d["imageurl"], d["likes"], d["dislikes"], datetime);
+            post = new Post(d["username"], avatar, d["post"], d["imageurl"], d["likes"], d["dislikes"], d["liked"], d["disliked"], datetime);
             posts.add(post);
         }
         return posts;
@@ -116,15 +116,19 @@ class Post {
     String imageurl;
     int likes;
     int dislikes;
+    bool liked;
+    bool disliked;
     DateTime datetime;
 
-    Post(String username, Avatar avatar, String post, String imageurl, int likes, int dislikes, DateTime datetime) {
+    Post(String username, Avatar avatar, String post, String imageurl, int likes, int dislikes, bool liked, bool disliked, DateTime datetime) {
         this.username = username;
         this.avatar = avatar;
         this.post = post;
         this.imageurl = imageurl;
         this.likes = likes;
         this.dislikes = dislikes;
+        this.liked = liked;
+        this.disliked = disliked;
         this.datetime = datetime;
     }
 }

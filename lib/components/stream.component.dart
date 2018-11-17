@@ -219,24 +219,8 @@ class _StreamComponentState extends State<StreamComponent> {
         ButtonTheme buttonBar = new ButtonTheme.bar(
             child: new ButtonBar(
                 children: <Widget>[
-                    new Row(
-                        children: <Widget>[
-                            new IconButton(
-                                onPressed: () => this._dislikePost(context, post),
-                                icon: new Icon(Icons.thumb_down),
-                            ),
-                            new Text(post.dislikes.toString()),
-                        ],
-                    ),
-                    new Row(
-                        children: <Widget>[
-                            new IconButton(
-                                onPressed: () => this._likePost(context, post),
-                                icon: new Icon(Icons.thumb_up),
-                            ),
-                            new Text(post.likes.toString()),
-                        ],
-                    ),
+                    this._buildButton(context, post, "dislike"),
+                    this._buildButton(context, post, "like"),
                 ],
             ),
         );
@@ -246,6 +230,36 @@ class _StreamComponentState extends State<StreamComponent> {
             padding: new EdgeInsets.symmetric(
                 horizontal: 10.0,
             ),
+        );
+    }
+
+    Widget _buildButton(BuildContext context, Post post, String reaction) {
+        bool reacted;
+        IconData iconData;
+        int reactions;
+        if (reaction == "like") {
+            reacted = post.liked;
+            iconData = Icons.thumb_up;
+            reactions = post.likes;
+        } else {
+            reacted = post.disliked;
+            iconData = Icons.thumb_down;
+            reactions = post.dislikes;
+        }
+        return new Row(
+            children: <Widget>[
+                new IconButton(
+                    onPressed: post.liked || post.disliked
+                        ? null
+                        : () => reaction == "like"
+                            ? this._likePost(context, post)
+                            : this._dislikePost(context, post),
+                    icon: reacted
+                        ? new Icon(iconData, color: Theme.of(context).accentColor)
+                        : new Icon(iconData),
+                ),
+                new Text(reactions.toString()),
+            ],
         );
     }
 
