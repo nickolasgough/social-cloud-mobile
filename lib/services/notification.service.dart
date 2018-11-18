@@ -21,7 +21,6 @@ class NotificationService {
             "limit": 10,
         };
         Map<String, dynamic> response = await _httpService.get("notification/list", body);
-
         return _deserializeNotifications(response["notifications"]);
     }
 
@@ -35,7 +34,7 @@ class NotificationService {
         DateTime datetime;
         for (Map<String, dynamic> d in data) {
             datetime = DateTime.parse(d["datetime"]).toLocal();
-            notice = new Notice(d["username"], d["type"], d["sender"], d["dismissed"], datetime);
+            notice = new Notice(d["username"], d["type"], d["sender"], d["displayname"], d["dismissed"], datetime);
             notices.add(notice);
         }
         return notices;
@@ -57,13 +56,15 @@ class Notice {
     String username;
     String type;
     String sender;
+    String displayname;
     bool dismissed;
     DateTime datetime;
 
-    Notice(String username, String type, String sender, bool dismissed, DateTime datetime) {
+    Notice(String username, String type, String sender, String displayname, bool dismissed, DateTime datetime) {
         this.username = username;
         this.type = type;
         this.sender = sender;
+        this.displayname = displayname;
         this.dismissed = dismissed;
         this.datetime = datetime;
     }

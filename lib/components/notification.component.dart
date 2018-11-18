@@ -132,7 +132,7 @@ class _NotificationComponentState extends State<NotificationComponent> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                     new ListTile(
-                        leading: new Icon(Icons.person_add),
+                        leading: this._notificationIcon(notice),
                         title: this._notificationTitle(notice),
                         subtitle: new Text(datetime),
                     ),
@@ -153,6 +153,21 @@ class _NotificationComponentState extends State<NotificationComponent> {
         return this._buildColumn(card);
     }
 
+    Widget _notificationIcon(Notice notice) {
+        IconData iconData;
+
+        switch (notice.type) {
+            case "post-liked":
+                iconData = Icons.thumb_up;
+                break;
+            case "post-disliked":
+                iconData = Icons.thumb_down;
+                break;
+        }
+
+        return new Icon(iconData);
+    }
+
     Widget _notificationTitle(Notice notice) {
         String title;
 
@@ -160,17 +175,29 @@ class _NotificationComponentState extends State<NotificationComponent> {
             case "connection-accepted":
                 title = "Connection Accepted";
                 break;
+            case "post-liked":
+                title = "Post Liked";
+                break;
+            case "post-disliked":
+                title = "Post Disliked";
+                break;
         }
         return new Text(title);
     }
 
     Widget _notificationBody(Notice notice) {
         String body;
-        String sender = notice.sender;
+        String displayname = notice.displayname;
 
         switch (notice.type) {
             case "connection-accepted":
-                body = "$sender accepted your connection request";
+                body = "${displayname} accepted your connection request";
+                break;
+            case "post-liked":
+                body = "${displayname} liked one of your posts";
+                break;
+            case "post-disliked":
+                body = "${displayname} disliked one of your posts";
                 break;
         }
         return new Text(body);
