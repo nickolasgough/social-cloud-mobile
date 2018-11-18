@@ -52,9 +52,13 @@ class ProfileService {
     }
 
     void _handleResponse(String username, String displayname, String imageurl) {
-        if (displayname != null && displayname.isNotEmpty) {
+        if (username != null && username.isNotEmpty) {
             _username = username;
+        }
+        if (displayname != null && displayname.isNotEmpty) {
             _displayname = displayname;
+        }
+        if (imageurl != null && imageurl.isNotEmpty) {
             _imageurl = imageurl;
         }
     }
@@ -63,8 +67,8 @@ class ProfileService {
         Map<String, dynamic> body = {
             "username": _username,
             "displayname": displayname,
-            "imagefile": imagefile.readAsBytesSync(),
-            "filename": parseFilename(imagefile),
+            "imagefile": imagefile != null ? imagefile.readAsBytesSync() : null,
+            "filename": imagefile != null ? parseFilename(imagefile) : null,
         };
         Map<String, dynamic> response = await _httpService.post("profile/update", body);
 
@@ -78,6 +82,10 @@ class ProfileService {
 
     String getDisplayname() {
         return _displayname;
+    }
+
+    bool hasProfileImage() {
+        return _imageurl != null;
     }
 
     String getImageurl() {

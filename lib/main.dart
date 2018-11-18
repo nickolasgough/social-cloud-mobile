@@ -17,7 +17,11 @@ class MyApp extends StatelessWidget {
     Widget build(BuildContext context) {
         return new MaterialApp(
             title: 'Social Cloud',
-            theme: new ThemeData(primarySwatch: Colors.blue),
+            theme: new ThemeData(
+                primarySwatch: Colors.blue,
+                canvasColor: Colors.blue,
+                scaffoldBackgroundColor: Colors.white,
+            ),
             routes: <String, WidgetBuilder>{
                 "/": (_) => new StartupComponent(),
                 "/login": (_) => new LoginComponent(),

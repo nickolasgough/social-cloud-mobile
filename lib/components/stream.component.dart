@@ -60,11 +60,12 @@ class _StreamComponentState extends State<StreamComponent> {
     }
 
     Widget _buildFeeds(BuildContext context, List<Feed> feeds) {
-        List<DropdownMenuItem> items = new List<DropdownMenuItem>();
+        List<PopupMenuItem<String>> items = new List<PopupMenuItem<String>>();
         for (Feed feed in feeds) {
-            items.add(new DropdownMenuItem<String>(
+            items.add(new PopupMenuItem<String>(
                 value: feed.feedname,
                 child: new Row(
+                    mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
                         new Icon(Icons.group),
@@ -76,23 +77,23 @@ class _StreamComponentState extends State<StreamComponent> {
 
         Widget dropdownButton = items.length > 0
             ? new Container(
-                child: new DropdownButton(
-                    hint: new Text("Feed"),
-                    items: items,
-                    value: this._feedname,
-                    onChanged: (feedname) => this.setState(() {
+                child: new PopupMenuButton<String>(
+                    icon: new Icon(
+                        Icons.group,
+                        color: Colors.white,
+                    ),
+                    onSelected: (feedname) => this.setState(() {
                         this._feedService.feedname = feedname;
                     }),
+                    itemBuilder: (BuildContext context) {
+                        return items;
+                    },
                 ),
                 decoration: new BoxDecoration(
-                    color: Colors.white,
-                    border: new Border.all(
-                        color: Theme.of(context).accentColor,
+                    color: Theme.of(context).accentColor,
+                    borderRadius: new BorderRadius.all(
+                        new Radius.circular(50.0),
                     ),
-                    borderRadius: new BorderRadius.all(new Radius.circular(25.0)),
-                ),
-                padding: new EdgeInsets.symmetric(
-                    horizontal: 10.0,
                 ),
             ) : null;
         return new Scaffold(

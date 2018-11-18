@@ -31,10 +31,13 @@ class _EditComponentState extends State<EditComponent> {
             ),
             body: new Center(
                 child: new Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
                         this._buildColumn(
                             new TextField(
+                                controller: new TextEditingController(
+                                    text: this._displayname,
+                                ),
                                 decoration: new InputDecoration(
                                     hintText: "Display Name"
                                 ),
@@ -46,20 +49,16 @@ class _EditComponentState extends State<EditComponent> {
                             icon: new Icon(Icons.camera_alt),
                             onPressed: this._pickImage,
                         ),
-                        this._buildColumn(new Builder(builder: (BuildContext context) {
-                            return new RaisedButton(
-                                child: new Text(
-                                    "Submit",
-                                    style: new TextStyle(
-                                        color: Colors.white
-                                    ),
-                                ),
-                                color: Theme.of(context).accentColor,
-                                onPressed: () => this._updateProfile(context),
-                            );
-                        })),
                     ],
                 ),
+            ),
+            floatingActionButton: new Builder(
+                builder: (BuildContext context) {
+                    return new FloatingActionButton(
+                        child: new Icon(Icons.check),
+                        onPressed: () => this._updateProfile(context),
+                    );
+                },
             ),
         );
     }
@@ -89,15 +88,23 @@ class _EditComponentState extends State<EditComponent> {
     }
 
     Widget _buildImage() {
-        return Image.file(this._imagefile,
-            height: 200.0,
-            width: 200.0,
+        return Image.file(
+            this._imagefile,
+            height: 150.0,
+            width: 150.0,
         );
     }
 
     Widget _buildDefault() {
+        if (this._profileService.hasProfileImage()) {
+            return new Image.network(
+                this._profileService.getImageurl(),
+                height: 150.0,
+                width: 150.0,
+            );
+        }
         return new Icon(Icons.person,
-            size: 200.0,
+            size: 150.0,
         );
     }
 
