@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'package:mobile/services/profile.service.dart';
+import 'package:mobile/util/dialog.dart';
 import 'package:mobile/util/snackbar.util.dart';
 
 
@@ -116,21 +117,25 @@ class _EditComponentState extends State<EditComponent> {
     }
 
     void _updateProfile(BuildContext context) {
+        showLoadingDialog(context);
+
         this._profileService.updateProfile(this._displayname, this._imagefile).then(
-            (success) => success
-                ? _handleSuccess(context)
-                : _handleFailure(context)
+            (success) {
+                Navigator.of(context).pop();
+                if (success) {
+                    this._handleSuccess(context);
+                } else {
+                    this._handleFailure(context);
+                }
+            }
         );
     }
 
     void _handleSuccess(BuildContext context) {
         showSuccessSnackBar(context, "profile update successful");
-        new Timer(
-            const Duration(
-                seconds: 1, milliseconds: 500
-            ),
-                () => Navigator.of(context).pushNamedAndRemoveUntil("/home", (Route<dynamic> route) => false)
-        );
+        new Timer(const Duration(
+            seconds: 1,
+        ), () => Navigator.of(context).pushNamedAndRemoveUntil("/home", (Route<dynamic> route) => false));
     }
 
     void _handleFailure(BuildContext context) {

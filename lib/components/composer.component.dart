@@ -6,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 
 import 'package:mobile/services/post.service.dart';
 import 'package:mobile/services/profile.service.dart';
+import 'package:mobile/util/dialog.dart';
 import 'package:mobile/util/snackbar.util.dart';
 
 
@@ -114,19 +115,28 @@ class _ComposerComponentState extends State<ComposerComponent> {
         });
     }
 
-    void _createPost(context) {
+    void _createPost(BuildContext context) {
+        showLoadingDialog(context);
+
         String username = this._profileService.getUsername();
         DateTime now = new DateTime.now();
         this._postService.createPost(username, this._post, this._imagefile, now).then(
-            (success) => success
-                ? this._handleSuccess(context)
-                : this._handleFailure(context)
+            (success) {
+                Navigator.of(context).pop();
+                if (success) {
+                    this._handleSuccess(context);
+                } else {
+                    this._handleFailure(context);
+                }
+            }
         );
     }
 
     void _handleSuccess(BuildContext context) {
         showSuccessSnackBar(context, "post successfully created");
-        new Timer(const Duration(seconds: 1, milliseconds: 500), () => Navigator.of(context).pop());
+        new Timer(const Duration(
+            seconds: 1,
+        ), () => Navigator.of(context).pop());
     }
 
     void _handleFailure(BuildContext context) {

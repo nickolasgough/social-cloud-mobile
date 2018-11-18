@@ -95,12 +95,9 @@ class _RegistrationComponentState extends State<RegistrationComponent> {
 
     void _handleSuccess(BuildContext context) {
         showSuccessSnackBar(context, "profile successfully created");
-        new Timer(
-            const Duration(
-                seconds: 1, milliseconds: 500
-            ),
-            () => Navigator.of(context).pushNamedAndRemoveUntil("/home", (Route<dynamic> route) => false)
-        );
+        new Timer(const Duration(
+            seconds: 1,
+        ), () => Navigator.of(context).pushNamedAndRemoveUntil("/home", (Route<dynamic> route) => false));
     }
 
     void _handleFailure(BuildContext context) {

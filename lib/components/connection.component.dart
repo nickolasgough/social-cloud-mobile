@@ -85,7 +85,9 @@ class _ConnectionComponentState extends State<ConnectionComponent> {
 
     void _handleSuccess(BuildContext context) {
         showSuccessSnackBar(context, "connection request sent");
-        new Timer(const Duration(seconds: 1, milliseconds: 500), () => Navigator.of(context).pop());
+        new Timer(const Duration(
+            seconds: 1,
+        ), () => Navigator.of(context).pop());
     }
 
     void _handleFailure(BuildContext context) {

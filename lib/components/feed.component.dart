@@ -152,12 +152,9 @@ class _FeedComponentState extends State<FeedComponent> {
 
     void _handleSuccess(BuildContext context) {
         showSuccessSnackBar(context, "feed successfully created");
-        new Timer(
-            const Duration(
-                seconds: 1, milliseconds: 500
-            ),
-                () => Navigator.of(context).pushNamedAndRemoveUntil("/home", (Route<dynamic> route) => false)
-        );
+        new Timer(const Duration(
+            seconds: 1,
+        ), () => Navigator.of(context).pushNamedAndRemoveUntil("/home", (Route<dynamic> route) => false));
     }
 
     void _handleFailure(BuildContext context) {
