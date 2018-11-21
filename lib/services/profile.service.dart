@@ -48,7 +48,7 @@ class ProfileService {
         Map<String, dynamic> response = await _httpService.post("profile/login", body);
 
         _handleResponse(username, response["displayname"], response["imageurl"]);
-        return response["displayname"] != null || response["imageurl"] != null;
+        return response["displayname"].isNotEmpty || response["imageurl"].isNotEmpty;
     }
 
     void _handleResponse(String username, String displayname, String imageurl) {
