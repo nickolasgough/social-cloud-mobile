@@ -157,28 +157,37 @@ class _StreamComponentState extends State<StreamComponent> {
     Widget _buildAvatar(String imageurl) {
         if (imageurl == null || imageurl.isEmpty) {
             return new Container(
-                child: new Icon(Icons.person,
-                    size: 50.0,
+                child: new Icon(
+                    Icons.person,
+                    size: 60.0,
                 ),
-                height: 50.0,
-                width: 50.0,
+                height: 60.0,
+                width: 60.0,
                 decoration: new BoxDecoration(
-                    border: new Border.all(color: Theme.of(context).accentColor),
-                    borderRadius: new BorderRadius.all(new Radius.circular(50.0)),
+                    border: new Border.all(
+                        color: Theme.of(context).accentColor,
+                    ),
+                    borderRadius: new BorderRadius.all(
+                        new Radius.circular(50.0),
+                    ),
                 ),
             );
         }
 
         return new Container(
-            height: 50.0,
-            width: 50.0,
+            height: 60.0,
+            width: 60.0,
             decoration: new BoxDecoration(
                 image: new DecorationImage(
                     image: new NetworkImage(imageurl),
-                    fit: BoxFit.cover,
+                    fit: BoxFit.contain,
                 ),
-                border: new Border.all(color: Theme.of(context).accentColor),
-                borderRadius: new BorderRadius.all(new Radius.circular(50.0)),
+                border: new Border.all(
+                    color: Theme.of(context).accentColor,
+                ),
+                borderRadius: new BorderRadius.all(
+                    new Radius.circular(50.0),
+                ),
             ),
         );
     }
@@ -203,15 +212,19 @@ class _StreamComponentState extends State<StreamComponent> {
         }
 
         return new Container(
-            height: 150.0,
-            width: 150.0,
+            width: 300.0,
+            height: 300.0,
             decoration: new BoxDecoration(
                 image: new DecorationImage(
+                    fit: BoxFit.contain,
                     image: new NetworkImage(imageurl),
-                    fit: BoxFit.cover,
                 ),
-                border: new Border.all(color: Theme.of(context).accentColor),
-                borderRadius: new BorderRadius.all(new Radius.circular(10.0)),
+                border: new Border.all(
+                    color: Theme.of(context).accentColor,
+                ),
+                borderRadius: new BorderRadius.all(
+                    new Radius.circular(10.0),
+                ),
             ),
         );
     }
@@ -256,8 +269,15 @@ class _StreamComponentState extends State<StreamComponent> {
                             ? this._likePost(context, post)
                             : this._dislikePost(context, post),
                     icon: reacted
-                        ? new Icon(iconData, color: Theme.of(context).accentColor)
-                        : new Icon(iconData),
+                        ? new Icon(
+                            iconData,
+                            color: Theme.of(context).accentColor,
+                            size: 30.0,
+                        )
+                        : new Icon(
+                            iconData,
+                            size: 30.0,
+                        ),
                 ),
                 new Text(reactions.toString()),
             ],

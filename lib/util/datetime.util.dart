@@ -1,10 +1,15 @@
 String shortDate(DateTime datetime) {
-    String month = months()[datetime.month];
+    String month = months()[datetime.month-1];
     return "$month ${datetime.day}, ${datetime.year}";
 }
 
 String shortTime(DateTime datetime) {
-    int h = datetime.hour > 12 ? datetime.hour - 12 : datetime.hour;
+    int h = datetime.hour > 12
+        ? datetime.hour-12
+        : datetime.hour;
+    if (datetime.hour == 0) {
+        h = 12;
+    }
     int m = datetime.minute;
     String p = period(datetime);
     String minute = m < 10 ? "0${m}" : "${m}";

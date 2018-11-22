@@ -31,9 +31,14 @@ class _EditComponentState extends State<EditComponent> {
                 title: new Text("Edit"),
             ),
             body: new Center(
-                child: new Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
+                child: new ListView(
                     children: <Widget>[
+                        this._buildColumn(this._buildAvatar()),
+                        new IconButton(
+                            iconSize: 30.0,
+                            icon: new Icon(Icons.camera_alt),
+                            onPressed: this._pickImage,
+                        ),
                         this._buildColumn(
                             new TextField(
                                 controller: new TextEditingController(
@@ -44,11 +49,6 @@ class _EditComponentState extends State<EditComponent> {
                                 ),
                                 onChanged: (value) => this._displayname = value,
                             )
-                        ),
-                        this._buildColumn(this._buildAvatar()),
-                        new IconButton(
-                            icon: new Icon(Icons.camera_alt),
-                            onPressed: this._pickImage,
                         ),
                     ],
                 ),
@@ -68,44 +68,57 @@ class _EditComponentState extends State<EditComponent> {
         return new Container(
             child: w,
             padding: new EdgeInsets.symmetric(
-                vertical: 10.0,
-                horizontal: 20.0,
+                vertical: 30.0,
+                horizontal: 50.0,
             ),
         );
     }
 
     Widget _buildAvatar() {
-        Widget child = this._imagefile != null
-            ? this._buildImage()
-            : this._buildDefault();
+        if (this._imagefile != null || this._profileService.hasProfileImage()) {
+            return this._buildImage();
+        } else {
+            return this._buildDefault();
+        }
+    }
+
+    Widget _buildImage() {
+        var imageProvider = this._imagefile != null
+            ? new FileImage(this._imagefile)
+            : new NetworkImage(this._profileService.getImageurl());
 
         return new Container(
-            child: child,
+            width: 300.0,
+            height: 300.0,
             decoration: new BoxDecoration(
-                border: new Border.all(color: Theme.of(context).accentColor),
-                borderRadius: new BorderRadius.all(new Radius.circular(10.0)),
+                image: new DecorationImage(
+                    fit: BoxFit.contain,
+                    image: imageProvider,
+                ),
+                border: new Border.all(
+                    color: Theme.of(context).accentColor,
+                ),
+                borderRadius: new BorderRadius.all(
+                    new Radius.circular(150.0),
+                ),
             ),
         );
     }
 
-    Widget _buildImage() {
-        return Image.file(
-            this._imagefile,
-            height: 150.0,
-            width: 150.0,
-        );
-    }
-
     Widget _buildDefault() {
-        if (this._profileService.hasProfileImage()) {
-            return new Image.network(
-                this._profileService.getImageurl(),
-                height: 150.0,
-                width: 150.0,
-            );
-        }
-        return new Icon(Icons.person,
-            size: 150.0,
+        return new Container(
+            child: new Icon(
+                Icons.person,
+                size: 300.0,
+            ),
+            decoration: new BoxDecoration(
+                border: new Border.all(
+                    color: Theme.of(context).accentColor,
+                ),
+                borderRadius: new BorderRadius.all(
+                    new Radius.circular(50.0),
+                ),
+            ),
         );
     }
 

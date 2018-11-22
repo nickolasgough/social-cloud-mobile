@@ -67,8 +67,8 @@ class _ConnectionComponentState extends State<ConnectionComponent> {
         return new Container(
             child: w,
             padding: new EdgeInsets.symmetric(
-                vertical: 10.0,
-                horizontal: 20.0,
+                vertical: 30.0,
+                horizontal: 50.0,
             ),
         );
     }

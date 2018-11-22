@@ -21,6 +21,10 @@ class MyApp extends StatelessWidget {
                 primarySwatch: Colors.blue,
                 canvasColor: Colors.blue,
                 scaffoldBackgroundColor: Colors.white,
+                buttonTheme: new ButtonThemeData(
+                    height: 40,
+                    minWidth: 200.0,
+                ),
             ),
             routes: <String, WidgetBuilder>{
                 "/": (_) => new StartupComponent(),

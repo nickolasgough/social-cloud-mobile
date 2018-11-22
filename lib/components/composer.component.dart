@@ -31,8 +31,7 @@ class _ComposerComponentState extends State<ComposerComponent> {
                 title: new Text("Composer"),
             ),
             body: new Center(
-                child: new Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                child: new ListView(
                     children: <Widget>[
                         this._buildColumn(
                             new Container(
@@ -47,15 +46,22 @@ class _ComposerComponentState extends State<ComposerComponent> {
                                     onChanged: (String value) => this._post = value,
                                 ),
                                 decoration: new BoxDecoration(
-                                    border: new Border.all(color: Theme.of(context).accentColor),
-                                    borderRadius: new BorderRadius.all(new Radius.circular(10.0)),
+                                    border: new Border.all(
+                                        color: Theme.of(context).accentColor,
+                                    ),
+                                    borderRadius: new BorderRadius.all(
+                                        new Radius.circular(10.0),
+                                    ),
                                 ),
                             ),
                         ),
                         this._buildColumn(this._buildPhoto()),
-                        new IconButton(
-                            icon: new Icon(Icons.camera_alt),
-                            onPressed: this._pickImage,
+                        this._buildColumn(
+                            new IconButton(
+                                iconSize: 30.0,
+                                icon: new Icon(Icons.camera_alt),
+                                onPressed: this._pickImage,
+                            ),
                         ),
                     ],
                 ),
@@ -74,9 +80,10 @@ class _ComposerComponentState extends State<ComposerComponent> {
     Widget _buildColumn(Widget w) {
         return new Container(
             child: w,
-            padding: new EdgeInsets.symmetric(
-                vertical: 10.0,
-                horizontal: 20.0,
+            padding: new EdgeInsets.only(
+                left: 50.0,
+                right: 50.0,
+                top: 30.0,
             ),
         );
     }
@@ -89,27 +96,35 @@ class _ComposerComponentState extends State<ComposerComponent> {
         return new Container(
             child: child,
             decoration: new BoxDecoration(
-                border: new Border.all(color: Theme.of(context).accentColor),
-                borderRadius: new BorderRadius.all(new Radius.circular(10.0)),
+                border: new Border.all(
+                    color: Theme.of(context).accentColor,
+                ),
+                borderRadius: new BorderRadius.all(
+                    new Radius.circular(10.0),
+                ),
             ),
         );
     }
 
     Widget _buildImage() {
-        return Image.file(this._imagefile,
-            height: 100.0,
-            width: 100.0,
+        return Image.file(
+            this._imagefile,
+            height: 300.0,
+            width: 300.0,
         );
     }
 
     Widget _buildDefault() {
-        return new Icon(Icons.photo,
-            size: 100.0,
+        return new Icon(
+            Icons.photo,
+            size: 300.0,
         );
     }
 
     void _pickImage() async {
-        File image = await ImagePicker.pickImage(source: ImageSource.gallery);
+        File image = await ImagePicker.pickImage(
+            source: ImageSource.gallery,
+        );
         this.setState(() {
             this._imagefile = image;
         });

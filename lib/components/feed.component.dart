@@ -37,7 +37,7 @@ class _FeedComponentState extends State<FeedComponent> {
                 builder: (BuildContext context) {
                     return new FloatingActionButton(
                         child: new Icon(Icons.add),
-                        onPressed: () => this._createGroup(context),
+                        onPressed: () => this._createFeed(context),
                     );
                 }
             ),
@@ -79,8 +79,12 @@ class _FeedComponentState extends State<FeedComponent> {
                 onChanged: (value) => this._feedname= value,
             ),
             decoration: new BoxDecoration(
-                border: new Border.all(color: Theme.of(context).accentColor),
-                borderRadius: new BorderRadius.all(new Radius.circular(10.0)),
+                border: new Border.all(
+                    color: Theme.of(context).accentColor,
+                ),
+                borderRadius: new BorderRadius.all(
+                    new Radius.circular(10.0),
+                ),
             ),
         );
 
@@ -95,15 +99,17 @@ class _FeedComponentState extends State<FeedComponent> {
             children.add(new CheckboxListTile(
                 title: new Text(connection.displayname),
                 value: this._isChecked(connection),
-                onChanged: (value) => this._updateGroup(n, value, connection),
+                onChanged: (value) => this._updateFeed(n, value, connection),
             ));
         }
 
-        Column column = new Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: children,
+        return new Expanded(
+            child: this._buildColumn(
+                new ListView(
+                    children: children,
+                )
+            ),
         );
-        return this._buildColumn(column);
     }
 
     bool _isChecked(Connection connection) {
@@ -113,7 +119,7 @@ class _FeedComponentState extends State<FeedComponent> {
         ) != null;
     }
 
-    void _updateGroup(int index, bool checked, Connection connection) {
+    void _updateFeed(int index, bool checked, Connection connection) {
         this.setState(() {
             if (checked) {
                 this._members.add(connection);
@@ -129,8 +135,8 @@ class _FeedComponentState extends State<FeedComponent> {
         return new Container(
             child: w,
             padding: new EdgeInsets.symmetric(
-                vertical: 20.0,
-                horizontal: 20.0,
+                vertical: 30.0,
+                horizontal: 50.0,
             ),
         );
     }
@@ -140,7 +146,7 @@ class _FeedComponentState extends State<FeedComponent> {
         return this._connectionService.listConnections(username);
     }
 
-    void _createGroup(BuildContext context) {
+    void _createFeed(BuildContext context) {
         String username = this._profileService.getUsername();
         DateTime now = new DateTime.now();
         this._groupService.createFeed(username, this._feedname, this._members, now).then(
