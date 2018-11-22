@@ -15,14 +15,6 @@
       },
       "oauth_client": [
         {
-          "client_id": "970460522785-3ij8tjqiu6coka2c8pskhu20qm9scvqn.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "socialcloud.mobile",
-            "certificate_hash": "7b86846ea792b41fd9f2c9ac1772c2943898786b"
-          }
-        },
-        {
           "client_id": "970460522785-5fmjnv18po2svn1vahtadboggm1hq5r6.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -37,13 +29,8 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 2,
-          "other_platform_oauth_client": [
-            {
-              "client_id": "970460522785-5fmjnv18po2svn1vahtadboggm1hq5r6.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "status": 1,
+          "other_platform_oauth_client": []
         },
         "ads_service": {
           "status": 2
