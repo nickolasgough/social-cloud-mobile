@@ -23,8 +23,9 @@ class MyApp extends StatelessWidget {
                 scaffoldBackgroundColor: Colors.white,
                 buttonTheme: new ButtonThemeData(
                     height: 40,
-                    minWidth: 200.0,
+                    minWidth: 150.0,
                 ),
+                fontFamily: "Roboto",
             ),
             routes: <String, WidgetBuilder>{
                 "/": (_) => new StartupComponent(),

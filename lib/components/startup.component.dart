@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
+import 'package:google_sign_in/google_sign_in.dart';
+
 
 class StartupComponent extends StatefulWidget {
     StartupComponent() : super();
@@ -11,6 +13,12 @@ class StartupComponent extends StatefulWidget {
 }
 
 class _StartupComponentState extends State<StartupComponent> {
+    GoogleSignIn _googleSignIn = new GoogleSignIn(
+        scopes: [
+            'email',
+        ],
+    );
+
     @override
     Widget build(BuildContext context) {
         return new Scaffold(
@@ -49,6 +57,38 @@ class _StartupComponentState extends State<StartupComponent> {
                                 );
                             }),
                         ),
+                        _buildColumn(new Text("or")),
+                        new Builder(builder: (BuildContext context) {
+                            return new RaisedButton(
+                                child: new Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: <Widget>[
+                                        new Image.asset(
+                                            "assets/google.jpg",
+                                            height: 35.0,
+                                            width: 35.0,
+                                        ),
+                                        new Container(
+                                            child: new Text(
+                                                "Sign in with Google",
+                                                style: new TextStyle(
+                                                    color: Colors.white
+                                                ),
+                                            ),
+                                            padding: new EdgeInsets.only(
+                                                left: 10.0,
+                                            ),
+                                        ),
+                                    ],
+                                ),
+                                color: Theme.of(context).accentColor,
+                                onPressed: () => _handleGoogle(context),
+                                padding: new EdgeInsets.symmetric(
+                                    horizontal: 3.0,
+                                ),
+                            );
+                        }),
                     ],
                 ),
             ),
@@ -71,5 +111,16 @@ class _StartupComponentState extends State<StartupComponent> {
 
     void _handleRegister(BuildContext context) {
         Navigator.of(context).pushNamed("/register");
+    }
+
+    void _handleGoogle(BuildContext context) {
+        this._googleSignIn.onCurrentUserChanged.listen(
+            (user) => print(user)
+        );
+        try {
+            this._googleSignIn.signIn();
+        } catch (error) {
+            print(error);
+        }
     }
 }
