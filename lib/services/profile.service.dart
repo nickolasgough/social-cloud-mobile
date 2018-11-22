@@ -10,7 +10,7 @@ class ProfileService {
 
     static final HttpService _httpService = new HttpService();
 
-    static String _username;
+    static String _email;
     static String _displayname;
     static String _imageurl;
 
@@ -20,9 +20,9 @@ class ProfileService {
 
     ProfileService._internal();
 
-    Future<bool> createProfile(String username, String password, String displayname, DateTime datetime) async {
+    Future<bool> createProfile(String email, String password, String displayname, DateTime datetime) async {
         Map<String, dynamic> body = {
-            "username": username,
+            "email": email,
             "password": password,
             "displayname": displayname,
             "datetime": datetime.toUtc().toIso8601String(),
@@ -31,29 +31,29 @@ class ProfileService {
 
         bool success = response["success"];
         if (success) {
-            _username = username;
+            _email = email;
             _displayname = displayname;
         } else {
-            _username = null;
+            _email = null;
             _displayname = null;
         }
         return success;
     }
 
-    Future<bool> loginProfile(String username, String password) async {
+    Future<bool> loginProfile(String email, String password) async {
         Map<String, dynamic> body = {
-            "username": username,
+            "email": email,
             "password": password,
         };
         Map<String, dynamic> response = await _httpService.post("profile/login", body);
 
-        _handleResponse(username, response["displayname"], response["imageurl"]);
+        _handleResponse(email, response["displayname"], response["imageurl"]);
         return response["displayname"].isNotEmpty || response["imageurl"].isNotEmpty;
     }
 
-    void _handleResponse(String username, String displayname, String imageurl) {
-        if (username != null && username.isNotEmpty) {
-            _username = username;
+    void _handleResponse(String email, String displayname, String imageurl) {
+        if (email != null && email.isNotEmpty) {
+            _email = email;
         }
         if (displayname != null && displayname.isNotEmpty) {
             _displayname = displayname;
@@ -65,19 +65,32 @@ class ProfileService {
 
     Future<bool> updateProfile(String displayname, File imagefile) async {
         Map<String, dynamic> body = {
-            "username": _username,
+            "email": _email,
             "displayname": displayname,
             "imagefile": imagefile != null ? imagefile.readAsBytesSync() : null,
             "filename": imagefile != null ? parseFilename(imagefile) : null,
         };
         Map<String, dynamic> response = await _httpService.post("profile/update", body);
 
-        _handleResponse(_username, response["displayname"], response["imageurl"]);
-        return response["displayname"] != null || response["imageurl"] != null;
+        _handleResponse(_email, response["displayname"], response["imageurl"]);
+        return response["displayname"].isNotEmpty || response["imageurl"].isNotEmpty;
     }
 
-    String getUsername() {
-        return _username;
+    Future<bool> googleSignIn(String email, String displayname, String imageurl, DateTime datetime) async {
+        Map<String, dynamic> body = {
+            "email": email,
+            "displayname": displayname,
+            "imageurl": imageurl,
+            "datetime": datetime.toUtc().toIso8601String(),
+        };
+        Map<String, dynamic> response = await _httpService.post("profile/google", body);
+
+        _handleResponse(email, response["displayname"], response["imageurl"]);
+        return response["displayname"].isNotEmpty || response["imageurl"].isNotEmpty;
+    }
+
+    String getEmail() {
+        return _email;
     }
 
     String getDisplayname() {

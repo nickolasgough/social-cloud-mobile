@@ -142,14 +142,14 @@ class _FeedComponentState extends State<FeedComponent> {
     }
 
     Future<List<Connection>> _listConnections() {
-        String username = this._profileService.getUsername();
-        return this._connectionService.listConnections(username);
+        String email = this._profileService.getEmail();
+        return this._connectionService.listConnections(email);
     }
 
     void _createFeed(BuildContext context) {
-        String username = this._profileService.getUsername();
+        String email = this._profileService.getEmail();
         DateTime now = new DateTime.now();
-        this._groupService.createFeed(username, this._feedname, this._members, now).then(
+        this._groupService.createFeed(email, this._feedname, this._members, now).then(
             (success) => success
                 ? this._handleSuccess(context)
                 : this._handleFailure(context)

@@ -14,7 +14,7 @@ class RegistrationComponent extends StatefulWidget {
 }
 
 class _RegistrationComponentState extends State<RegistrationComponent> {
-    String _username;
+    String _email;
     String _password;
     String _displayname;
 
@@ -33,14 +33,16 @@ class _RegistrationComponentState extends State<RegistrationComponent> {
                         this._buildColumn(
                             new TextField(
                                 decoration: new InputDecoration(
-                                    hintText: "Username"
+                                    labelText: "Email",
+                                    hintText: "example@email.com"
                                 ),
-                                onChanged: (value) => this._username = value,
+                                onChanged: (value) => this._email = value,
                             )
                         ),
                         this._buildColumn(
                             new TextField(
                                 decoration: new InputDecoration(
+                                    labelText: "Password",
                                     hintText: "Password"
                                 ),
                                 onChanged: (value) => this._password = value,
@@ -49,6 +51,7 @@ class _RegistrationComponentState extends State<RegistrationComponent> {
                         this._buildColumn(
                             new TextField(
                                 decoration: new InputDecoration(
+                                    labelText: "Display Name",
                                     hintText: "Display Name"
                                 ),
                                 onChanged: (value) => this._displayname = value,
@@ -86,7 +89,7 @@ class _RegistrationComponentState extends State<RegistrationComponent> {
 
     void _handleSubmit(BuildContext context) {
         DateTime now = new DateTime.now();
-        profileService.createProfile(this._username, this._password, this._displayname, now).then(
+        profileService.createProfile(this._email, this._password, this._displayname, now).then(
             (success) => success
                 ? this._handleSuccess(context)
                 : this._handleFailure(context)

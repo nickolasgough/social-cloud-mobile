@@ -20,9 +20,9 @@ class FeedService {
     String get feedname => _feedname;
     set feedname(String f) => _feedname = f;
 
-    Future<bool> createFeed(String username, String feedname, List<Connection> members, DateTime datetime) async {
+    Future<bool> createFeed(String email, String feedname, List<Connection> members, DateTime datetime) async {
         Map<String, dynamic> body = {
-            "username": username,
+            "email": email,
             "feedname": feedname,
             "members": _serializeFeed(members, datetime),
             "datetime": datetime.toUtc().toIso8601String(),
@@ -44,9 +44,9 @@ class FeedService {
         return data;
     }
 
-    Future<List<Feed>> listFeeds(String username) async {
+    Future<List<Feed>> listFeeds(String email) async {
         Map<String, dynamic> body = {
-            "username": username,
+            "email": email,
             "cursor": 0,
             "limit": 10,
         };
@@ -68,7 +68,7 @@ class FeedService {
         for (Map<String, dynamic> d in data) {
             members = _deserializeMembers(d["members"]);
             datetime = DateTime.parse(d["datetime"]).toLocal();
-            feed = new Feed(d["username"], d["feedname"], members, datetime);
+            feed = new Feed(d["email"], d["feedname"], members, datetime);
             feeds.add(feed);
         }
         return feeds;
@@ -92,13 +92,13 @@ class FeedService {
 }
 
 class Feed {
-    String username;
+    String email;
     String feedname;
     List<Member> members;
     DateTime datetime;
 
-    Feed(String username, String feedname, List<Member> members, DateTime datetime) {
-        this.username = username;
+    Feed(String email, String feedname, List<Member> members, DateTime datetime) {
+        this.email = email;
         this.feedname = feedname;
         this.members = members;
         this.datetime = datetime;

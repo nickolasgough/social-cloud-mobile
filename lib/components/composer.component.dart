@@ -133,9 +133,9 @@ class _ComposerComponentState extends State<ComposerComponent> {
     void _createPost(BuildContext context) {
         showLoadingDialog(context);
 
-        String username = this._profileService.getUsername();
+        String email = this._profileService.getEmail();
         DateTime now = new DateTime.now();
-        this._postService.createPost(username, this._post, this._imagefile, now).then(
+        this._postService.createPost(email, this._post, this._imagefile, now).then(
             (success) {
                 Navigator.of(context).pop();
                 if (success) {

@@ -16,9 +16,9 @@ class PostService {
 
     PostService._internal();
 
-    Future<bool> createPost(String username, String post, File imagefile, DateTime datetime) async {
+    Future<bool> createPost(String email, String post, File imagefile, DateTime datetime) async {
         Map<String, dynamic> body = {
-            "username": username,
+            "email": email,
             "post": post,
             "filename": imagefile != null ? parseFilename(imagefile) : null,
             "imagefile": imagefile != null ? imagefile.readAsBytesSync() : null,
@@ -30,9 +30,9 @@ class PostService {
         return success;
     }
 
-    Future<bool> likePost(String username, Post post, DateTime datetime) async {
+    Future<bool> likePost(String email, Post post, DateTime datetime) async {
         Map<String, dynamic> body = {
-            "username": username,
+            "email": email,
             "post": _serializePost(post),
             "reaction": "liked",
             "reacttime": datetime.toUtc().toIso8601String(),
@@ -43,9 +43,9 @@ class PostService {
         return success;
     }
 
-    Future<bool> dislikePost(String username, Post post, DateTime datetime) async {
+    Future<bool> dislikePost(String email, Post post, DateTime datetime) async {
         Map<String, dynamic> body = {
-            "username": username,
+            "email": email,
             "post": _serializePost(post),
             "reaction": "disliked",
             "reacttime": datetime.toUtc().toIso8601String(),
@@ -58,7 +58,7 @@ class PostService {
 
     Map<String, dynamic> _serializePost(Post post) {
         return {
-            "username": post.username,
+            "email": post.email,
             "avatar": _serializeAvatar(post.avatar),
             "post": post.post,
             "imageurl": post.imageurl,
@@ -73,9 +73,9 @@ class PostService {
         };
     }
 
-    Future<List<Post>> listPosts(String username, String feedname) async {
+    Future<List<Post>> listPosts(String email, String feedname) async {
         Map<String, dynamic> body = {
-            "username": username,
+            "email": email,
             "feedname": feedname,
             "cursor": 0,
             "limit": 25,
@@ -98,7 +98,7 @@ class PostService {
         for (Map<String, dynamic> d in data) {
             avatar = _deserializeAvatar(d["avatar"]);
             datetime = DateTime.parse(d["datetime"]).toLocal();
-            post = new Post(d["username"], avatar, d["post"], d["imageurl"], d["likes"], d["dislikes"], d["liked"], d["disliked"], datetime);
+            post = new Post(d["email"], avatar, d["post"], d["imageurl"], d["likes"], d["dislikes"], d["liked"], d["disliked"], datetime);
             posts.add(post);
         }
         return posts;
@@ -110,7 +110,7 @@ class PostService {
 }
 
 class Post {
-    String username;
+    String email;
     Avatar avatar;
     String post;
     String imageurl;
@@ -120,8 +120,8 @@ class Post {
     bool disliked;
     DateTime datetime;
 
-    Post(String username, Avatar avatar, String post, String imageurl, int likes, int dislikes, bool liked, bool disliked, DateTime datetime) {
-        this.username = username;
+    Post(String email, Avatar avatar, String post, String imageurl, int likes, int dislikes, bool liked, bool disliked, DateTime datetime) {
+        this.email = email;
         this.avatar = avatar;
         this.post = post;
         this.imageurl = imageurl;

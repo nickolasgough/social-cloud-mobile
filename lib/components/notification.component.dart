@@ -51,8 +51,8 @@ class _NotificationComponentState extends State<NotificationComponent> {
     }
 
     Future<List<Notice>> _listNotifications() async {
-        String username = this._profileService.getUsername();
-        return this._notificationService.listNotifications(username);
+        String email = this._profileService.getEmail();
+        return this._notificationService.listNotifications(email);
     }
 
     Widget _buildNotifications(BuildContext context, List<Notice> notices) {
@@ -105,9 +105,9 @@ class _NotificationComponentState extends State<NotificationComponent> {
     }
 
     void _acceptConnection(BuildContext context, Notice notice) {
-        String username = this._profileService.getUsername();
+        String email = this._profileService.getEmail();
         DateTime now = new DateTime.now();
-        this._connectionService.acceptConnection(username, notice.sender, now).then(
+        this._connectionService.acceptConnection(email, notice.sender, now).then(
                 (success) => success
                 ? this._handleSuccess(context, "connection request accepted")
                 : this._handleFailure(context, "connection request not accepted")
@@ -115,9 +115,9 @@ class _NotificationComponentState extends State<NotificationComponent> {
     }
 
     void _declineConnection(BuildContext context, Notice notice) {
-        String username = this._profileService.getUsername();
+        String email = this._profileService.getEmail();
         DateTime now = new DateTime.now();
-        this._connectionService.declineConnection(username, notice.sender, now).then(
+        this._connectionService.declineConnection(email, notice.sender, now).then(
                 (success) => success
                 ? this._handleSuccess(context, "connection request declined")
                 : this._handleFailure(context, "connection request not declined")
@@ -204,7 +204,7 @@ class _NotificationComponentState extends State<NotificationComponent> {
     }
 
     void _dismissNotification(BuildContext context, Notice notice) {
-        this._notificationService.dismissNotification(notice.username, notice.sender, notice.datetime).then(
+        this._notificationService.dismissNotification(notice.email, notice.sender, notice.datetime).then(
                 (success) => success
                 ? this._handleSuccess(context, "notifcation successfully dismissed")
                 : this._handleFailure(context, "failed to dismiss notification")

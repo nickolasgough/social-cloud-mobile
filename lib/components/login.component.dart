@@ -14,7 +14,7 @@ class LoginComponent extends StatefulWidget {
 }
 
 class _LoginComponentState extends State<LoginComponent> {
-    String _username;
+    String _email;
     String _password;
 
     ProfileService profileService = new ProfileService();
@@ -32,15 +32,17 @@ class _LoginComponentState extends State<LoginComponent> {
                         _buildColumn(
                             new TextField(
                                 decoration: new InputDecoration(
-                                    hintText: "Username"
+                                    labelText: "Email",
+                                    hintText: "example@email.com",
                                 ),
-                                onChanged: (value) => this._username = value,
+                                onChanged: (value) => this._email = value,
                             )
                         ),
                         _buildColumn(
                             new TextField(
                                 decoration: new InputDecoration(
-                                    hintText: "Password"
+                                    labelText: "Password",
+                                    hintText: "Password",
                                 ),
                                 onChanged: (value) => this._password = value,
                             )
@@ -76,7 +78,7 @@ class _LoginComponentState extends State<LoginComponent> {
     }
 
     void _handleSubmit(BuildContext context) {
-        profileService.loginProfile(this._username, this._password).then(
+        profileService.loginProfile(this._email, this._password).then(
                 (success) => success
                 ? this._handleSuccess(context)
                 : this._handleFailure(context)

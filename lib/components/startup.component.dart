@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:mobile/services/profile.service.dart';
+import 'package:mobile/util/snackbar.util.dart';
 
 
 class StartupComponent extends StatefulWidget {
@@ -13,6 +15,8 @@ class StartupComponent extends StatefulWidget {
 }
 
 class _StartupComponentState extends State<StartupComponent> {
+    ProfileService _profileService = new ProfileService();
+
     GoogleSignIn _googleSignIn = new GoogleSignIn(
         scopes: [
             'email',
@@ -114,11 +118,24 @@ class _StartupComponentState extends State<StartupComponent> {
     }
 
     void _handleGoogle(BuildContext context) {
-        this._googleSignIn.onCurrentUserChanged.listen(
-            (user) => print(user)
-        );
         try {
-            this._googleSignIn.signIn();
+            this._googleSignIn.signIn().then(
+                (account) {
+                    DateTime datetime = new DateTime.now();
+                    this._profileService.googleSignIn(account.email, account.displayName, account.photoUrl, datetime).then(
+                        (success) {
+                            if (success) {
+                                showSuccessSnackBar(context, "profile sign in successful");
+                                new Timer(const Duration(
+                                    seconds: 1,
+                                ), () => Navigator.of(context).pushNamedAndRemoveUntil("/home", (Route<dynamic> route) => false));
+                            } else {
+                                showSuccessSnackBar(context, "failed to sign in profile");
+                            }
+                        }
+                    );
+                }
+            );
         } catch (error) {
             print(error);
         }

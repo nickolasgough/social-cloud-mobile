@@ -14,9 +14,9 @@ class NotificationService {
 
     NotificationService._internal();
 
-    Future<List<Notice>> listNotifications(String username) async {
+    Future<List<Notice>> listNotifications(String email) async {
         Map<String, dynamic> body = {
-            "username": username,
+            "email": email,
             "cursor": 0,
             "limit": 10,
         };
@@ -34,15 +34,15 @@ class NotificationService {
         DateTime datetime;
         for (Map<String, dynamic> d in data) {
             datetime = DateTime.parse(d["datetime"]).toLocal();
-            notice = new Notice(d["username"], d["type"], d["sender"], d["displayname"], d["dismissed"], datetime);
+            notice = new Notice(d["email"], d["type"], d["sender"], d["displayname"], d["dismissed"], datetime);
             notices.add(notice);
         }
         return notices;
     }
 
-    Future<bool> dismissNotification(String username, String sender, DateTime datetime) async {
+    Future<bool> dismissNotification(String email, String sender, DateTime datetime) async {
         Map<String, dynamic> body = {
-            "username": username,
+            "email": email,
             "sender": sender,
             "datetime": datetime.toUtc().toIso8601String(),
         };
@@ -53,15 +53,15 @@ class NotificationService {
 }
 
 class Notice {
-    String username;
+    String email;
     String type;
     String sender;
     String displayname;
     bool dismissed;
     DateTime datetime;
 
-    Notice(String username, String type, String sender, String displayname, bool dismissed, DateTime datetime) {
-        this.username = username;
+    Notice(String email, String type, String sender, String displayname, bool dismissed, DateTime datetime) {
+        this.email = email;
         this.type = type;
         this.sender = sender;
         this.displayname = displayname;

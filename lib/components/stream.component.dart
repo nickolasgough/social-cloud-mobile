@@ -55,8 +55,8 @@ class _StreamComponentState extends State<StreamComponent> {
     }
 
     Future<List<Feed>> _listFeeds() async {
-        String username = this._profileService.getUsername();
-        return this._feedService.listFeeds(username);
+        String email = this._profileService.getEmail();
+        return this._feedService.listFeeds(email);
     }
 
     Widget _buildFeeds(BuildContext context, List<Feed> feeds) {
@@ -103,8 +103,8 @@ class _StreamComponentState extends State<StreamComponent> {
     }
 
     Widget _buildStream(String feedname) {
-        String username = this._profileService.getUsername();
-        this._posts = this._postService.listPosts(username, feedname);
+        String email = this._profileService.getEmail();
+        this._posts = this._postService.listPosts(email, feedname);
 
         return new FutureBuilder(
             future: this._posts,
@@ -285,9 +285,9 @@ class _StreamComponentState extends State<StreamComponent> {
     }
 
     void _likePost(BuildContext context, Post post) {
-        String username = this._profileService.getUsername();
+        String email = this._profileService.getEmail();
         DateTime datetime = new DateTime.now();
-        this._postService.likePost(username, post, datetime).then(
+        this._postService.likePost(email, post, datetime).then(
             (success) {
                 if (success) {
                     this.setState(() {
@@ -302,9 +302,9 @@ class _StreamComponentState extends State<StreamComponent> {
     }
 
     void _dislikePost(BuildContext context, Post post) {
-        String username = this._profileService.getUsername();
+        String email = this._profileService.getEmail();
         DateTime datetime = new DateTime.now();
-        this._postService.dislikePost(username, post, datetime).then(
+        this._postService.dislikePost(email, post, datetime).then(
             (success) {
                 if (success) {
                     this.setState(() {

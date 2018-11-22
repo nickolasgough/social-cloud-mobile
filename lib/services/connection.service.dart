@@ -14,9 +14,9 @@ class ConnectionService {
 
     ConnectionService._internal();
 
-    Future<bool> requestConnection(String username, String connection, DateTime datetime) async {
+    Future<bool> requestConnection(String email, String connection, DateTime datetime) async {
         Map<String, dynamic> body = {
-            "username": username,
+            "email": email,
             "connection": connection,
             "datetime": datetime.toUtc().toIso8601String()
         };
@@ -26,9 +26,9 @@ class ConnectionService {
         return success;
     }
 
-    Future<bool> acceptConnection(String username, String connection, DateTime datetime) async {
+    Future<bool> acceptConnection(String email, String connection, DateTime datetime) async {
         Map<String, dynamic> body = {
-            "username": username,
+            "email": email,
             "connection": connection,
             "datetime": datetime.toUtc().toIso8601String()
         };
@@ -38,9 +38,9 @@ class ConnectionService {
         return success;
     }
 
-    Future<bool> declineConnection(String username, String connection, DateTime datetime) async {
+    Future<bool> declineConnection(String email, String connection, DateTime datetime) async {
         Map<String, dynamic> body = {
-            "username": username,
+            "email": email,
             "connection": connection,
             "datetime": datetime.toUtc().toIso8601String()
         };
@@ -50,9 +50,9 @@ class ConnectionService {
         return success;
     }
 
-    Future<List<Connection>> listConnections(String username) async {
+    Future<List<Connection>> listConnections(String email) async {
         Map<String, dynamic> body = {
-            "username": username,
+            "email": email,
             "cursor": 0,
             "limit": 10,
         };
@@ -72,7 +72,7 @@ class ConnectionService {
         DateTime datetime;
         for (Map<String, dynamic> d in data) {
             datetime = DateTime.parse(d["datetime"]).toLocal();
-            connection = new Connection(d["username"], d["connection"], d["displayname"], datetime);
+            connection = new Connection(d["email"], d["connection"], d["displayname"], datetime);
             connections.add(connection);
         }
         return connections;
@@ -80,13 +80,13 @@ class ConnectionService {
 }
 
 class Connection {
-    String username;
+    String email;
     String connection;
     String displayname;
     DateTime datetime;
 
-    Connection(String username, String connection, String displayname, DateTime datetime) {
-        this.username = username;
+    Connection(String email, String connection, String displayname, DateTime datetime) {
+        this.email = email;
         this.connection = connection;
         this.displayname = displayname;
         this.datetime = datetime;
