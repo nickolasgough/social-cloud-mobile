@@ -16,12 +16,13 @@ class PostService {
 
     PostService._internal();
 
-    Future<bool> createPost(String email, String post, File imagefile, DateTime datetime) async {
+    Future<bool> createPost(String email, String post, File imagefile, String linkurl, DateTime datetime) async {
         Map<String, dynamic> body = {
             "email": email,
             "post": post,
             "filename": imagefile != null ? parseFilename(imagefile) : null,
             "imagefile": imagefile != null ? imagefile.readAsBytesSync() : null,
+            "linkurl": linkurl,
             "datetime": datetime.toUtc().toIso8601String(),
         };
         Map<String, dynamic> response = await _httpService.post("post/create", body);
@@ -98,7 +99,7 @@ class PostService {
         for (Map<String, dynamic> d in data) {
             avatar = _deserializeAvatar(d["avatar"]);
             datetime = DateTime.parse(d["datetime"]).toLocal();
-            post = new Post(d["email"], avatar, d["post"], d["imageurl"], d["likes"], d["dislikes"], d["liked"], d["disliked"], datetime);
+            post = new Post(d["email"], avatar, d["post"], d["imageurl"], d["linkurl"], d["likes"], d["dislikes"], d["liked"], d["disliked"], datetime);
             posts.add(post);
         }
         return posts;
@@ -114,17 +115,19 @@ class Post {
     Avatar avatar;
     String post;
     String imageurl;
+    String linkurl;
     int likes;
     int dislikes;
     bool liked;
     bool disliked;
     DateTime datetime;
 
-    Post(String email, Avatar avatar, String post, String imageurl, int likes, int dislikes, bool liked, bool disliked, DateTime datetime) {
+    Post(String email, Avatar avatar, String post, String imageurl, String linkurl, int likes, int dislikes, bool liked, bool disliked, DateTime datetime) {
         this.email = email;
         this.avatar = avatar;
         this.post = post;
         this.imageurl = imageurl;
+        this.linkurl = linkurl;
         this.likes = likes;
         this.dislikes = dislikes;
         this.liked = liked;

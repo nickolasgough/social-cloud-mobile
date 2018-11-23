@@ -11,6 +11,7 @@ class ProfileService {
     static final HttpService _httpService = new HttpService();
 
     static String _email;
+    static String _password;
     static String _displayname;
     static String _imageurl;
 
@@ -32,9 +33,11 @@ class ProfileService {
         bool success = response["success"];
         if (success) {
             _email = email;
+            _password = password;
             _displayname = displayname;
         } else {
             _email = null;
+            _password = null;
             _displayname = null;
         }
         return success;
@@ -47,13 +50,16 @@ class ProfileService {
         };
         Map<String, dynamic> response = await _httpService.post("profile/login", body);
 
-        _handleResponse(email, response["displayname"], response["imageurl"]);
+        _handleResponse(email, password, response["displayname"], response["imageurl"]);
         return response["displayname"].isNotEmpty || response["imageurl"].isNotEmpty;
     }
 
-    void _handleResponse(String email, String displayname, String imageurl) {
+    void _handleResponse(String email, String password, String displayname, String imageurl) {
         if (email != null && email.isNotEmpty) {
             _email = email;
+        }
+        if (password != null && password.isNotEmpty) {
+            _password = password;
         }
         if (displayname != null && displayname.isNotEmpty) {
             _displayname = displayname;
@@ -63,16 +69,17 @@ class ProfileService {
         }
     }
 
-    Future<bool> updateProfile(String displayname, File imagefile) async {
+    Future<bool> updateProfile(String displayname, String password, File imagefile) async {
         Map<String, dynamic> body = {
             "email": _email,
+            "password": password,
             "displayname": displayname,
             "imagefile": imagefile != null ? imagefile.readAsBytesSync() : null,
             "filename": imagefile != null ? parseFilename(imagefile) : null,
         };
         Map<String, dynamic> response = await _httpService.post("profile/update", body);
 
-        _handleResponse(_email, response["displayname"], response["imageurl"]);
+        _handleResponse(_email, password, response["displayname"], response["imageurl"]);
         return response["displayname"].isNotEmpty || response["imageurl"].isNotEmpty;
     }
 
@@ -85,12 +92,16 @@ class ProfileService {
         };
         Map<String, dynamic> response = await _httpService.post("profile/google", body);
 
-        _handleResponse(email, response["displayname"], response["imageurl"]);
-        return response["displayname"].isNotEmpty || response["imageurl"].isNotEmpty;
+        _handleResponse(email, response["password"], response["displayname"], response["imageurl"]);
+        return response["password"].isNotEmpty || response["displayname"].isNotEmpty || response["imageurl"].isNotEmpty;
     }
 
     String getEmail() {
         return _email;
+    }
+
+    String getPassword() {
+        return _password;
     }
 
     String getDisplayname() {

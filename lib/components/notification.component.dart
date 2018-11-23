@@ -71,7 +71,7 @@ class _NotificationComponentState extends State<NotificationComponent> {
     }
 
     Widget _buildConnection(BuildContext context, Notice notice) {
-        String sender = notice.sender;
+        String displayname = notice.displayname;
         String datetime = shortDate(notice.datetime);
 
         Card card = new Card(
@@ -83,7 +83,7 @@ class _NotificationComponentState extends State<NotificationComponent> {
                         title: new Text("Connection Request"),
                         subtitle: new Text(datetime),
                     ),
-                    this._buildBody(new Text("$sender requested to connect with you")),
+                    this._buildBody(new Text("${displayname} requested to connect with you")),
                     new ButtonTheme.bar(
                         child: new ButtonBar(
                             children: <Widget>[

@@ -23,6 +23,7 @@ class _ComposerComponentState extends State<ComposerComponent> {
 
     String _post;
     File _imagefile;
+    String _linkurl;
 
     @override
     Widget build(BuildContext context) {
@@ -37,7 +38,8 @@ class _ComposerComponentState extends State<ComposerComponent> {
                             new Container(
                                 child: new TextField(
                                     decoration: new InputDecoration(
-                                        hintText: "Compose Post",
+                                        labelText: "Post",
+                                        hintText: "Post",
                                         contentPadding: new EdgeInsets.all(10.0),
                                         border: InputBorder.none,
                                     ),
@@ -63,6 +65,27 @@ class _ComposerComponentState extends State<ComposerComponent> {
                                 onPressed: this._pickImage,
                             ),
                         ),
+                        this._buildColumn(
+                            new Container(
+                                child: new TextField(
+                                    decoration: new InputDecoration(
+                                        labelText: "Link",
+                                        hintText: "Link",
+                                        contentPadding: new EdgeInsets.all(10.0),
+                                        border: InputBorder.none,
+                                    ),
+                                    onChanged: (String value) => this._linkurl = value,
+                                ),
+                                decoration: new BoxDecoration(
+                                    border: new Border.all(
+                                        color: Theme.of(context).accentColor,
+                                    ),
+                                    borderRadius: new BorderRadius.all(
+                                        new Radius.circular(10.0),
+                                    ),
+                                ),
+                            ),
+                        ),
                     ],
                 ),
             ),
@@ -83,19 +106,37 @@ class _ComposerComponentState extends State<ComposerComponent> {
             padding: new EdgeInsets.only(
                 left: 50.0,
                 right: 50.0,
-                top: 30.0,
+                top: 10.0,
             ),
         );
     }
 
     Widget _buildPhoto() {
-        Widget child = this._imagefile != null
-            ? this._buildImage()
-            : this._buildDefault();
+        if (this._imagefile == null) {
+            return new Container(
+                child: new Icon(
+                    Icons.photo,
+                    size: 250.0,
+                ),
+                decoration: new BoxDecoration(
+                    border: new Border.all(
+                        color: Theme.of(context).accentColor,
+                    ),
+                    borderRadius: new BorderRadius.all(
+                        new Radius.circular(10.0),
+                    ),
+                ),
+            );
+        }
 
         return new Container(
-            child: child,
+            width: 250.0,
+            height: 250.0,
             decoration: new BoxDecoration(
+                image: new DecorationImage(
+                    fit: BoxFit.contain,
+                    image: new FileImage(this._imagefile),
+                ),
                 border: new Border.all(
                     color: Theme.of(context).accentColor,
                 ),
@@ -103,21 +144,6 @@ class _ComposerComponentState extends State<ComposerComponent> {
                     new Radius.circular(10.0),
                 ),
             ),
-        );
-    }
-
-    Widget _buildImage() {
-        return Image.file(
-            this._imagefile,
-            height: 300.0,
-            width: 300.0,
-        );
-    }
-
-    Widget _buildDefault() {
-        return new Icon(
-            Icons.photo,
-            size: 300.0,
         );
     }
 
@@ -135,7 +161,7 @@ class _ComposerComponentState extends State<ComposerComponent> {
 
         String email = this._profileService.getEmail();
         DateTime now = new DateTime.now();
-        this._postService.createPost(email, this._post, this._imagefile, now).then(
+        this._postService.createPost(email, this._post, this._imagefile, this._linkurl, now).then(
             (success) {
                 Navigator.of(context).pop();
                 if (success) {

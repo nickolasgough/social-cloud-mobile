@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:mobile/services/feed.service.dart';
 import 'package:mobile/services/post.service.dart';
 import 'package:mobile/services/profile.service.dart';
@@ -196,6 +197,17 @@ class _StreamComponentState extends State<StreamComponent> {
         List<Widget> children = <Widget>[
             this._buildColumn(new Text(post.post)),
         ];
+        if (post.linkurl != null && post.linkurl.isNotEmpty) {
+            children.add(new InkWell(
+                child: new Text(
+                    post.linkurl,
+                    style: new TextStyle(
+                        color: Colors.blue,
+                    ),
+                ),
+                onTap: () => launch(post.linkurl),
+            ));
+        }
         Widget photo = this._buildPhoto(post.imageurl);
         if (photo != null) {
             children.add(this._buildColumn(photo));

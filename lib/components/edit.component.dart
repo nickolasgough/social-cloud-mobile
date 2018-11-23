@@ -20,11 +20,13 @@ class _EditComponentState extends State<EditComponent> {
     ProfileService _profileService = new ProfileService();
 
     String _displayname;
+    String _password;
     File _imagefile;
 
     @override
     Widget build(BuildContext context) {
         this._displayname = this._profileService.getDisplayname();
+        this._password = this._profileService.getPassword();
 
         return new Scaffold(
             appBar: new AppBar(
@@ -45,9 +47,22 @@ class _EditComponentState extends State<EditComponent> {
                                     text: this._displayname,
                                 ),
                                 decoration: new InputDecoration(
+                                    labelText: "Display Name",
                                     hintText: "Display Name"
                                 ),
                                 onChanged: (value) => this._displayname = value,
+                            )
+                        ),
+                        this._buildColumn(
+                            new TextField(
+                                controller: new TextEditingController(
+                                    text: this._password,
+                                ),
+                                decoration: new InputDecoration(
+                                    labelText: "Password",
+                                    hintText: "Password"
+                                ),
+                                onChanged: (value) => this._password = value,
                             )
                         ),
                     ],
@@ -68,7 +83,7 @@ class _EditComponentState extends State<EditComponent> {
         return new Container(
             child: w,
             padding: new EdgeInsets.symmetric(
-                vertical: 30.0,
+                vertical: 10.0,
                 horizontal: 50.0,
             ),
         );
@@ -132,7 +147,7 @@ class _EditComponentState extends State<EditComponent> {
     void _updateProfile(BuildContext context) {
         showLoadingDialog(context);
 
-        this._profileService.updateProfile(this._displayname, this._imagefile).then(
+        this._profileService.updateProfile(this._displayname, this._password, this._imagefile).then(
             (success) {
                 Navigator.of(context).pop();
                 if (success) {
