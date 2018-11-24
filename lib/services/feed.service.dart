@@ -17,9 +17,6 @@ class FeedService {
 
     FeedService._internal();
 
-    String get feedname => _feedname;
-    set feedname(String f) => _feedname = f;
-
     Future<bool> createFeed(String email, String feedname, List<Connection> members, DateTime datetime) async {
         Map<String, dynamic> body = {
             "email": email,

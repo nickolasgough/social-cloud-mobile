@@ -23,13 +23,21 @@ class _StreamComponentState extends State<StreamComponent> {
 
     Future<List<Feed>> _feeds;
     String _feedname;
-
     Future<List<Post>> _posts;
+
+    bool _initialized = false;
+
+    void _initialize() {
+        if (!this._initialized) {
+            this._initialized = true;
+            this._feeds = this._listFeeds();
+            this._feedname = this._profileService.getDefaultFeed();
+        }
+    }
 
     @override
     Widget build(BuildContext context) {
-        this._feeds = this._listFeeds();
-        this._feedname = this._feedService.feedname;
+        this._initialize();
 
         return new FutureBuilder(
             future: this._feeds,
@@ -84,7 +92,7 @@ class _StreamComponentState extends State<StreamComponent> {
                         color: Colors.white,
                     ),
                     onSelected: (feedname) => this.setState(() {
-                        this._feedService.feedname = feedname;
+                        this._feedname = feedname;
                     }),
                     itemBuilder: (BuildContext context) {
                         return items;

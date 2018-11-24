@@ -19,7 +19,6 @@ class MyApp extends StatelessWidget {
             title: 'Social Cloud',
             theme: new ThemeData(
                 primarySwatch: Colors.blue,
-                canvasColor: Colors.blue,
                 scaffoldBackgroundColor: Colors.white,
                 buttonTheme: new ButtonThemeData(
                     height: 40,

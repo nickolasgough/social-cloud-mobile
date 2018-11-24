@@ -14,6 +14,7 @@ class ProfileService {
     static String _password;
     static String _displayname;
     static String _imageurl;
+    static String _defaultFeed;
 
     factory ProfileService() {
         return _profileService;
@@ -50,11 +51,11 @@ class ProfileService {
         };
         Map<String, dynamic> response = await _httpService.post("profile/login", body);
 
-        _handleResponse(email, password, response["displayname"], response["imageurl"]);
+        _handleResponse(email, password, response["displayname"], response["imageurl"], response["defaultfeed"]);
         return response["displayname"].isNotEmpty || response["imageurl"].isNotEmpty;
     }
 
-    void _handleResponse(String email, String password, String displayname, String imageurl) {
+    void _handleResponse(String email, String password, String displayname, String imageurl, String defaultFeed) {
         if (email != null && email.isNotEmpty) {
             _email = email;
         }
@@ -67,19 +68,23 @@ class ProfileService {
         if (imageurl != null && imageurl.isNotEmpty) {
             _imageurl = imageurl;
         }
+        if (defaultFeed != null && defaultFeed.isNotEmpty) {
+            _defaultFeed = defaultFeed;
+        }
     }
 
-    Future<bool> updateProfile(String displayname, String password, File imagefile) async {
+    Future<bool> updateProfile(String displayname, String password, File imagefile, String defaultFeed) async {
         Map<String, dynamic> body = {
             "email": _email,
             "password": password,
             "displayname": displayname,
             "imagefile": imagefile != null ? imagefile.readAsBytesSync() : null,
             "filename": imagefile != null ? parseFilename(imagefile) : null,
+            "defaultfeed": defaultFeed,
         };
         Map<String, dynamic> response = await _httpService.post("profile/update", body);
 
-        _handleResponse(_email, password, response["displayname"], response["imageurl"]);
+        _handleResponse(_email, password, response["displayname"], response["imageurl"], response["defaultfeed"]);
         return response["displayname"].isNotEmpty || response["imageurl"].isNotEmpty;
     }
 
@@ -92,7 +97,7 @@ class ProfileService {
         };
         Map<String, dynamic> response = await _httpService.post("profile/google", body);
 
-        _handleResponse(email, response["password"], response["displayname"], response["imageurl"]);
+        _handleResponse(email, response["password"], response["displayname"], response["imageurl"], response["defaultfeed"]);
         return response["password"].isNotEmpty || response["displayname"].isNotEmpty || response["imageurl"].isNotEmpty;
     }
 
@@ -142,6 +147,10 @@ class ProfileService {
 
     String getImageurl() {
         return _imageurl;
+    }
+
+    String getDefaultFeed() {
+        return _defaultFeed;
     }
 }
 
