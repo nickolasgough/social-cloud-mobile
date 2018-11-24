@@ -79,7 +79,10 @@ class _NotificationComponentState extends State<NotificationComponent> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                     new ListTile(
-                        leading: new Icon(Icons.person_add),
+                        leading: new Icon(
+                            Icons.person_add,
+                            size: 60.0,
+                        ),
                         title: new Text("Connection Request"),
                         subtitle: new Text(datetime),
                     ),
@@ -141,7 +144,7 @@ class _NotificationComponentState extends State<NotificationComponent> {
                         child: new ButtonBar(
                             children: <Widget>[
                                 new FlatButton(
-                                    onPressed: () => _dismissNotification(context, notice),
+                                    onPressed: () => this._dismissNotification(context, notice),
                                     child: new Text("DISMISS"),
                                 ),
                             ],
@@ -157,6 +160,9 @@ class _NotificationComponentState extends State<NotificationComponent> {
         IconData iconData;
 
         switch (notice.type) {
+            case "connection-accepted":
+                iconData = Icons.person_add;
+                break;
             case "post-liked":
                 iconData = Icons.thumb_up;
                 break;
@@ -165,7 +171,10 @@ class _NotificationComponentState extends State<NotificationComponent> {
                 break;
         }
 
-        return new Icon(iconData);
+        return new Icon(
+            iconData,
+            size: 60.0,
+        );
     }
 
     Widget _notificationTitle(Notice notice) {

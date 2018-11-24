@@ -96,6 +96,34 @@ class ProfileService {
         return response["password"].isNotEmpty || response["displayname"].isNotEmpty || response["imageurl"].isNotEmpty;
     }
 
+    Future<List<User>> searchUsers(String query) async {
+        Map<String, dynamic> body = {
+            "email": _email,
+            "query": query,
+        };
+        Map<String, dynamic> response = await _httpService.post("user/search", body);
+
+        List<User> users = this._deserializeUsers(response["users"]);
+        return users;
+    }
+
+    List<User> _deserializeUsers(List<dynamic> data) {
+        List<User> users = new List<User>();
+        if (data == null) {
+            return users;
+        }
+
+        User user;
+        DateTime datetime;
+        for (Map<String, dynamic> d in data) {
+            datetime = DateTime.parse(d["datetime"]).toLocal();
+            user = new User(d["email"], d["displayname"], d["imageurl"], d["connected"], datetime);
+            users.add(user);
+        }
+
+        return users;
+    }
+
     String getEmail() {
         return _email;
     }
@@ -114,5 +142,21 @@ class ProfileService {
 
     String getImageurl() {
         return _imageurl;
+    }
+}
+
+class User {
+    String email;
+    String displayname;
+    String imageurl;
+    bool connected;
+    DateTime datetime;
+
+    User(String email, String displayname, String imageurl, bool connected, DateTime datetime) {
+        this.email = email;
+        this.displayname = displayname;
+        this.imageurl = imageurl;
+        this.connected = connected;
+        this.datetime = datetime;
     }
 }

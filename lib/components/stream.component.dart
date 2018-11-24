@@ -97,6 +97,7 @@ class _StreamComponentState extends State<StreamComponent> {
                     ),
                 ),
             ) : null;
+
         return new Scaffold(
             body: this._buildStream(this._feedname),
             floatingActionButton: dropdownButton
