@@ -143,9 +143,6 @@ class _EditComponentState extends State<EditComponent> {
                 border: new Border.all(
                     color: Theme.of(context).accentColor,
                 ),
-                borderRadius: new BorderRadius.all(
-                    new Radius.circular(100.0),
-                ),
             ),
         );
     }

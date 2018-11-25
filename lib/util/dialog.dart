@@ -16,7 +16,7 @@ void showLoadingDialog(BuildContext context) {
                     decoration: new BoxDecoration(
                         color: Colors.white,
                         borderRadius: new BorderRadius.all(
-                            new Radius.circular(50.0),
+                            new Radius.circular(25.0),
                         ),
                     ),
                 ),

@@ -204,7 +204,12 @@ class _StreamComponentState extends State<StreamComponent> {
 
     Widget _buildBody(Post post) {
         List<Widget> children = <Widget>[
-            this._buildColumn(new Text(post.post)),
+            this._buildColumn(new Container(
+                child: new Text(post.post),
+                padding: new EdgeInsets.symmetric(
+                    horizontal: 20.0,
+                ),
+            )),
         ];
         if (post.linkurl != null && post.linkurl.isNotEmpty) {
             children.add(new InkWell(
