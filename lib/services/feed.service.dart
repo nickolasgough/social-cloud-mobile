@@ -9,8 +9,6 @@ class FeedService {
 
     static final HttpService _httpService = new HttpService();
 
-    String _feedname;
-
     factory FeedService() {
         return _feedService;
     }
