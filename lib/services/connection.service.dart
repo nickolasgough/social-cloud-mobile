@@ -72,7 +72,7 @@ class ConnectionService {
         DateTime datetime;
         for (Map<String, dynamic> d in data) {
             datetime = DateTime.parse(d["datetime"]).toLocal();
-            connection = new Connection(d["email"], d["connection"], d["displayname"], datetime);
+            connection = new Connection(d["email"], d["connection"], d["displayname"], d["imageurl"], datetime);
             connections.add(connection);
         }
         return connections;
@@ -83,12 +83,14 @@ class Connection {
     String email;
     String connection;
     String displayname;
+    String imageurl;
     DateTime datetime;
 
-    Connection(String email, String connection, String displayname, DateTime datetime) {
+    Connection(String email, String connection, String displayname, String imageurl, DateTime datetime) {
         this.email = email;
         this.connection = connection;
         this.displayname = displayname;
+        this.imageurl = imageurl;
         this.datetime = datetime;
     }
 }

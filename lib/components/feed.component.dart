@@ -97,7 +97,17 @@ class _FeedComponentState extends State<FeedComponent> {
         for (int n = 0; n < connections.length; n += 1) {
             Connection connection = connections[n];
             children.add(new CheckboxListTile(
-                title: new Text(connection.displayname),
+                title: new Row(
+                    children: <Widget>[
+                        this._buildAvatar(connection.imageurl),
+                        new Container(
+                            child: new Text(connection.displayname),
+                            padding: new EdgeInsets.only(
+                                left: 10.0,
+                            ),
+                        ),
+                    ],
+                ),
                 value: this._isChecked(connection),
                 onChanged: (value) => this._updateFeed(n, value, connection),
             ));
@@ -108,6 +118,44 @@ class _FeedComponentState extends State<FeedComponent> {
                 new ListView(
                     children: children,
                 )
+            ),
+        );
+    }
+
+    Widget _buildAvatar(String imageurl) {
+        if (imageurl == null || imageurl.isEmpty) {
+            return new Container(
+                child: new Icon(
+                    Icons.person,
+                    size: 45.0,
+                ),
+                height: 45.0,
+                width: 45.0,
+                decoration: new BoxDecoration(
+                    border: new Border.all(
+                        color: Theme.of(context).accentColor,
+                    ),
+                    borderRadius: new BorderRadius.all(
+                        new Radius.circular(22.5),
+                    ),
+                ),
+            );
+        }
+
+        return new Container(
+            height: 45.0,
+            width: 45.0,
+            decoration: new BoxDecoration(
+                image: new DecorationImage(
+                    image: new NetworkImage(imageurl),
+                    fit: BoxFit.contain,
+                ),
+                border: new Border.all(
+                    color: Theme.of(context).accentColor,
+                ),
+                borderRadius: new BorderRadius.all(
+                    new Radius.circular(22.5),
+                ),
             ),
         );
     }

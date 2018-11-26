@@ -120,24 +120,24 @@ class _ConnectionComponentState extends State<ConnectionComponent> {
             return new Container(
                 child: new Icon(
                     Icons.person,
-                    size: 30.0,
+                    size: 45.0,
                 ),
-                height: 30.0,
-                width: 30.0,
+                height: 45.0,
+                width: 45.0,
                 decoration: new BoxDecoration(
                     border: new Border.all(
                         color: Theme.of(context).accentColor,
                     ),
                     borderRadius: new BorderRadius.all(
-                        new Radius.circular(15.0),
+                        new Radius.circular(22.5),
                     ),
                 ),
             );
         }
 
         return new Container(
-            height: 30.0,
-            width: 30.0,
+            height: 45.0,
+            width: 45.0,
             decoration: new BoxDecoration(
                 image: new DecorationImage(
                     image: new NetworkImage(imageurl),
@@ -147,7 +147,7 @@ class _ConnectionComponentState extends State<ConnectionComponent> {
                     color: Theme.of(context).accentColor,
                 ),
                 borderRadius: new BorderRadius.all(
-                    new Radius.circular(15.0),
+                    new Radius.circular(22.5),
                 ),
             ),
         );
