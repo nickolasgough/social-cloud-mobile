@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:mobile/components/thread.component.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:mobile/services/feed.service.dart';
 import 'package:mobile/services/post.service.dart';
@@ -261,6 +262,20 @@ class _StreamComponentState extends State<StreamComponent> {
                 children: <Widget>[
                     this._buildButton(context, post, "dislike"),
                     this._buildButton(context, post, "like"),
+                    new IconButton(
+                        onPressed: () => this._viewComments(context, post),
+                        icon: post.comments > 0
+                            ? new Icon(
+                            Icons.comment,
+                            color: Theme.of(context).accentColor,
+                            size: 30.0,
+                        )
+                            : new Icon(
+                            Icons.comment,
+                            size: 30.0,
+                        ),
+                    ),
+                    new Text(post.comments.toString()),
                 ],
             ),
         );
@@ -304,6 +319,7 @@ class _StreamComponentState extends State<StreamComponent> {
                             iconData,
                             size: 30.0,
                         ),
+                    alignment: Alignment.centerLeft,
                 ),
                 new Text(reactions.toString()),
             ],
@@ -341,6 +357,17 @@ class _StreamComponentState extends State<StreamComponent> {
                     this._handleFailure(context, "dislike");
                 }
             }
+        );
+    }
+
+    void _viewComments(BuildContext context, Post post) {
+        Navigator.push(
+            context,
+            new MaterialPageRoute(
+                builder: (BuildContext context) {
+                    return new ThreadComponent(feedname: this._feedname,post: post);
+                }
+            ),
         );
     }
 

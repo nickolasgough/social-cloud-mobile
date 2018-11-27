@@ -99,7 +99,7 @@ class PostService {
         for (Map<String, dynamic> d in data) {
             avatar = _deserializeAvatar(d["avatar"]);
             datetime = DateTime.parse(d["datetime"]).toLocal();
-            post = new Post(d["email"], avatar, d["post"], d["imageurl"], d["linkurl"], d["likes"], d["dislikes"], d["liked"], d["disliked"], datetime);
+            post = new Post(d["email"], avatar, d["post"], d["imageurl"], d["linkurl"], d["likes"], d["dislikes"], d["liked"], d["disliked"], d["comments"], datetime);
             posts.add(post);
         }
         return posts;
@@ -120,9 +120,10 @@ class Post {
     int dislikes;
     bool liked;
     bool disliked;
+    int comments;
     DateTime datetime;
 
-    Post(String email, Avatar avatar, String post, String imageurl, String linkurl, int likes, int dislikes, bool liked, bool disliked, DateTime datetime) {
+    Post(String email, Avatar avatar, String post, String imageurl, String linkurl, int likes, int dislikes, bool liked, bool disliked, int comments, DateTime datetime) {
         this.email = email;
         this.avatar = avatar;
         this.post = post;
@@ -132,6 +133,7 @@ class Post {
         this.dislikes = dislikes;
         this.liked = liked;
         this.disliked = disliked;
+        this.comments = comments;
         this.datetime = datetime;
     }
 }
