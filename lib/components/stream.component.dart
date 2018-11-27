@@ -70,7 +70,19 @@ class _StreamComponentState extends State<StreamComponent> {
     }
 
     Widget _buildFeeds(BuildContext context, List<Feed> feeds) {
-        List<PopupMenuItem<String>> items = new List<PopupMenuItem<String>>();
+        List<PopupMenuItem<String>> items = <PopupMenuItem<String>>[
+            new PopupMenuItem<String>(
+                value: "",
+                child: new Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                        new Icon(Icons.group),
+                        this._buildColumn(new Text("My Posts")),
+                    ],
+                ),
+            )
+        ];
         for (Feed feed in feeds) {
             items.add(new PopupMenuItem<String>(
                 value: feed.feedname,
