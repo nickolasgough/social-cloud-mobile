@@ -71,7 +71,8 @@ class _FeedComponentState extends State<FeedComponent> {
         Container container = new Container(
             child: new TextField(
                 decoration: new InputDecoration(
-                    hintText: "Enter name",
+                    labelText: "Name",
+                    hintText: "Name",
                     contentPadding: new EdgeInsets.all(10.0),
                     border: InputBorder.none,
                 ),
