@@ -169,6 +169,9 @@ class _NotificationComponentState extends State<NotificationComponent> {
             case "post-disliked":
                 iconData = Icons.thumb_down;
                 break;
+            case "post-comment":
+                iconData = Icons.add_comment;
+                break;
         }
 
         return new Icon(
@@ -190,6 +193,9 @@ class _NotificationComponentState extends State<NotificationComponent> {
             case "post-disliked":
                 title = "Post Disliked";
                 break;
+            case "post-comment":
+                title = "Post Comment";
+                break;
         }
         return new Text(title);
     }
@@ -207,6 +213,9 @@ class _NotificationComponentState extends State<NotificationComponent> {
                 break;
             case "post-disliked":
                 body = "${displayname} disliked one of your posts";
+                break;
+            case "post-comment":
+                body = "${displayname} commented on one of your posts";
                 break;
         }
         return new Text(body);

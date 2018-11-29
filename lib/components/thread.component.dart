@@ -44,7 +44,7 @@ class _ThreadComponentState extends State<ThreadComponent> {
                         floatingActionButton: new Builder(
                             builder: (BuildContext context) {
                                 return new FloatingActionButton(
-                                    child: new Icon(Icons.comment),
+                                    child: new Icon(Icons.add_comment),
                                     onPressed: () => this._createComment(context, this.post),
                                 );
                             },
