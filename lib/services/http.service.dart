@@ -60,9 +60,8 @@ class HttpService {
     }
 
     String get _baseUrl {
-        String scheme = "http";
-        String ipAddress = "35.184.170.191";
-        String port = "8080";
-        return "$scheme://$ipAddress:$port";
+        String scheme = "https";
+        String domain = "social-cloud-1540055012833.appspot.com";
+        return "$scheme://$domain";
     }
 }
