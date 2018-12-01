@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:mobile/components/notification.component.dart';
 import 'package:mobile/components/stream.component.dart';
