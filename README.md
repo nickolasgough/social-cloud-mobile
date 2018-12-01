@@ -77,7 +77,7 @@ utility functions that handle date formatting, common dialogs, common snackbars,
 file manipulation functions. These are used by other components and services for completing
 common tasks.
 
-#### Other files of interest
+### Other files of interest
 
 pubspec.yaml
     -> This file defines the dependencies of the project. This includes flutter packages that
