@@ -1,6 +1,6 @@
 # Social Cloud Mobile
 
-The mobile frontend client for the social cloud project.
+The mobile frontend client for the Social Cloud project.
 
 ## Running The Application
 
