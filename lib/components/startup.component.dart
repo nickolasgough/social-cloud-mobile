@@ -121,6 +121,11 @@ class _StartupComponentState extends State<StartupComponent> {
         try {
             this._googleSignIn.signIn().then(
                 (account) {
+                    if (account == null) {
+                        showFailureSnackBar(context, "failed to sign in profile");
+                        return;
+                    }
+
                     DateTime datetime = new DateTime.now();
                     this._profileService.googleSignIn(account.email, account.displayName, account.photoUrl, datetime).then(
                         (success) {
@@ -130,7 +135,7 @@ class _StartupComponentState extends State<StartupComponent> {
                                     seconds: 1,
                                 ), () => Navigator.of(context).pushNamedAndRemoveUntil("/home", (Route<dynamic> route) => false));
                             } else {
-                                showSuccessSnackBar(context, "failed to sign in profile");
+                                showFailureSnackBar(context, "failed to sign in profile");
                             }
                         }
                     );
