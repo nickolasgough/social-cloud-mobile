@@ -65,13 +65,13 @@ to the individual components.
 
 #### components
 
-This folder contains the dart source code for each of the project's individual components. This
-includes the startup component, the home component, the composer component, the thread component,
-and other components. Essentially, each component that is navigated to within the mobile client is
-defined within its own dart file within this directory. Each smaller component used within the
-larger components are also defined within the component file that uses it. In the future, the
-reusable components should be isolated into their own dart source files. Each of these components
-defines some app behaviour and logic, as well as the interactive components.
+This folder contains the dart source code for each of the project's individual components.
+This includes the startup component, the home component, the composer component, the thread
+component, and other components. Essentially, each component that is navigated to within the
+mobile client is defined within its own dart file within this directory. Each smaller component
+used within the larger components are also defined within the component file that uses it. In
+the future, the reusable components should be isolated into their own dart source files. Each
+of these components defines some app behaviour and logic, as well as the interactive components.
 
 #### services
 
